@@ -21,3 +21,6 @@ CREATE TABLE recipe_dietTypes(
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     FOREIGN KEY (diet_id) REFERENCES dietTypes(diet_id) ON DELETE CASCADE
 );
+
+INSERT INTO diets(name)
+VALUES ('Gluten Free'), ('Ketogenic'), ('Vegetarian'), ('Lacto-Vegetarian'), ('Ovo-Vegetarian'), ('Vegan'), ('Pescetarian'), ('Paleo'), ('Primal');
