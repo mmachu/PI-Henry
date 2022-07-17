@@ -12,7 +12,6 @@ const router = Router();
 
 router.get("/recipes", async (req, res) => {
   const name = req.query.name;
-  console.log(`name: ${name}`);
   try {
     const recipes = await Recipe.findAll({
       where: {
@@ -20,22 +19,28 @@ router.get("/recipes", async (req, res) => {
           [Op.like]: `%${name}%`,
         },
       },
+      attributes: ["recipe_id", "name", "description"],
+      include: [
+        { model: Diet, attributes: ["name"], through: { attributes: [] } },
+      ],
     });
-    res.status(201).send(recipes);
-    // https.get(
-    //   `https://api.spoonacular.com/recipes/complexSearch?query=${name}&information&apiKey=${process.env.API_KEY}&addRecipeInformation=true`,
-    //   (resp) => {
-    //     let data = "";
-    //     resp
-    //       .on("data", (chunk) => {
-    //         data += chunk;
-    //       })
-    //       .on("end", () => {
-    //         let result = [JSON.parse(data), recipes];
-    //         res.status(201).send(result);
-    //       });
-    //   }
-    // );
+    https.get(
+      `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=33ad83164c5b4a189915daf114101f1b&number=1`,
+      (resp) => {
+        let data = "";
+        resp
+          .on("data", (chunk) => {
+            data += chunk;
+          })
+          .on("end", () => {
+            if (recipes.length === 0 && data.results.length === 0) {
+              res.status(404).send("No se encontraron recetas");
+            }
+            let result = { spoonacular: JSON.parse(data), foodDB: recipes };
+            res.status(200).send(result);
+          });
+      }
+    );
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -44,7 +49,7 @@ router.get("/recipes", async (req, res) => {
 router.get("/recipes/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    if (Number(id) !== NaN) {
+    if (!Number(id)) {
       let recipe = await Recipe.findOne({
         where: { recipe_id: id },
         include: [
