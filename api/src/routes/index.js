@@ -44,36 +44,38 @@ router.get("/recipes", async (req, res) => {
 router.get("/recipes/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    let recipe = [];
     if (Number(id) !== NaN) {
-      recipe = await Recipe.findOne({
-        where: { id: id },
-        include: RecipeDiet,
+      let recipe = await Recipe.findOne({
+        where: { recipe_id: id },
+        include: [
+          { model: Diet, attributes: ["name"], through: { attributes: [] } },
+        ],
       });
+      if (Object.keys(recipe).length === 0) {
+        res.status(404).send("No se encontró la receta");
+      } else {
+        res.status(200).send(recipe);
+      }
+    } else {
+      https.get(
+        `https://api.spoonacular.com/recipes/${id}?information&apiKey=${process.env.API_KEY}&addRecipeInformation=true`,
+        (resp) => {
+          if (resp.statusCode === 404) {
+            res.status(404).send("No se encontró la receta");
+          } else {
+            let data = "";
+            resp
+              .on("data", (chunk) => {
+                data += chunk;
+              })
+              .on("end", () => {
+                let result = JSON.parse(data);
+                res.status(201).send(result);
+              });
+          }
+        }
+      );
     }
-    res.status(200).send(recipe);
-    // https.get(
-    //   `https://api.spoonacular.com/recipes/${id}?information&apiKey=${process.env.API_KEY}&addRecipeInformation=true`,
-    //   (resp) => {
-    //     if (resp.statusCode === 404) {
-    //       if (recipe.length === 0) {
-    //         res.status(404).send("No se encontró la receta");
-    //       } else {
-    //         res.status(200).send(recipe);
-    //       }
-    //     } else {
-    //       let data = "";
-    //       resp
-    //         .on("data", (chunk) => {
-    //           data += chunk;
-    //         })
-    //         .on("end", () => {
-    //           let result = [JSON.parse(data), recipes];
-    //           res.status(201).send(result);
-    //         });
-    //     }
-    //   }
-    // );
   } catch (err) {
     res.status(400).send(err.message);
   }
