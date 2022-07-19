@@ -2,8 +2,8 @@ const { Router } = require("express");
 const https = require("https");
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
-const { Recipe, RecipeDiet, Diet } = require("../db.js");
-const { Op } = require("sequelize");
+const { Recipe, RecipeDiet, Diet, Op } = require("../db.js");
+//const {  } = require("sequelize");
 const { send } = require("process");
 const router = Router();
 
@@ -81,6 +81,17 @@ router.get("/recipes/:id", async (req, res) => {
         }
       );
     }
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+});
+
+router.get("/diets", async (req, res) => {
+  try {
+    const diets = await Diet.findAll({
+      attributes: ["name"],
+    });
+    res.status(200).send(diets);
   } catch (err) {
     res.status(400).send(err.message);
   }

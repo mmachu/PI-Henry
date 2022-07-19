@@ -1,0 +1,253 @@
+:root {
+  --yellow: rgb(255, 202, 104, 1);
+  --orange: rgb(245, 187, 165, 1);
+  --green: rgb(53, 97, 5, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  text-transform: uppercase;
+  font-size: clamp(3rem, 5vw + 0.5rem, 5rem);
+  line-height: 0.9;
+  margin: 0;
+  color: var(--yellow);
+}
+
+p {
+  font-size: clamp(1.5rem, 5vw + 0.5rem, 2rem);
+  line-height: 1.5;
+  margin: 0;
+  color: var(--yellow);
+}
+
+ul {
+  list-style: none;
+  color: var(--yellow);
+}
+
+li {
+  display: flex;
+  align-items: center;
+  margin: 8px 0px 8px 0px;
+}
+
+h4 {
+  margin: 10px 0px;
+}
+
+button {
+  margin: 15px 0px 0px 0px;
+  border: none;
+  border-style: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: var(--yellow);
+  color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+input {
+  max-width: 500px;
+  min-width: 200px;
+  height: 30px;
+  border: none;
+}
+
+input:focus {
+  outline: none;
+}
+
+label {
+  margin: 5px 0px;
+}
+
+.background {
+  min-height: 100vh;
+  background-image: url("https://wallpaperaccess.com/full/1412206.jpg");
+  background-size: cover;
+  color: white;
+  display: flex;
+  isolation: isolate;
+
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("https://wallpaperaccess.com/full/1412206.jpg");
+  display: flex;
+  background-size: cover;
+  justify-content: center;
+  align-items: center; */
+  /* transition: all 0.2s ease-in-out;
+  -webkit-animation: fade 5s infinite;
+  -moz-animation: fade 5s infinite;
+  -o-animation: fade 5s infinite;
+  animation: fade 5s infinite;
+  isolation: isolate; */
+}
+
+.active {
+  background-color: var(--orange);
+}
+
+.formContainer {
+  width: 70%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.form {
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  background-color: rgba(100, 97, 97, 0.5);
+}
+
+.formButtonsContainer {
+  width: 100%;
+  height: 10%;
+  margin: auto;
+  display: flex;
+}
+
+.formButtonsText {
+  color: rgb(231, 231, 231, 1);
+}
+
+.formButtons {
+  width: 50%;
+  height: 100%;
+  margin: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formButtons:hover {
+  cursor: pointer;
+}
+
+.userLogin {
+  color: rgb(255, 255, 255, 1);
+  width: 100%;
+  height: 80%;
+  margin-top: 10%;
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+  align-items: center;
+}
+
+.textContainer {
+  width: fit-content;
+  text-decoration: none;
+  margin: auto;
+  text-align: left;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
+}
+
+.styleSetter {
+  width: 30%;
+  padding: 2em;
+  padding-top: min(15vh, 10rem);
+  position: relative;
+  justify-content: center;
+  text-decoration: none;
+  margin: 0px;
+  font-family: "Poppins", sans-serif;
+  /* width: 30%;
+  padding: 2em;
+  padding-top: min(15vh, 10rem);
+  background: #355f08;
+  height: 80%; */
+
+  /* box-sizing: border-box;
+  font-size: 4vw;
+  color: #000;
+  background-color: #fff;
+  margin: 0px;
+  padding: 0px 10px 0px 10px;
+  
+  z-index: -1; */
+}
+
+.styleSetter::after {
+  content: "";
+  mix-blend-mode: multiply;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--green);
+}
+
+/* @-webkit-keyframes fade {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+@-moz-keyframes fade {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+@-o-keyframes fade {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+@keyframes fade {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  } 
+}*/
