@@ -54,14 +54,14 @@ button:hover {
   cursor: pointer;
 }
 
-input {
+.inputMain {
   max-width: 500px;
   min-width: 200px;
   height: 30px;
   border: none;
 }
 
-input:focus {
+.inputMain:focus {
   outline: none;
 }
 

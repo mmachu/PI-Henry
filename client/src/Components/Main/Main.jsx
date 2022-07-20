@@ -4,8 +4,8 @@ import styles from "./main.module.css";
 import { TbDeviceFloppy, TbFilter } from "react-icons/tb";
 import { MdOutlineCreate, MdSearch } from "react-icons/md";
 import { SiCookiecutter } from "react-icons/si";
-import Login from "./Login.jsx";
-import Register from "./Register.jsx";
+import Login from "../Login/Login.jsx";
+import Register from "../Register/Register.jsx";
 
 const Main = () => {
   const [intervalID, setIntervalID] = useState(null);

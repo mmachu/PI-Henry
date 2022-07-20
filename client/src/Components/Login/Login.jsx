@@ -1,14 +1,14 @@
 import React from "react";
-import styles from "./main.module.css";
+import styles from "../Main/main.module.css";
 import { NavLink } from "react-router-dom";
 const Register = () => {
   return (
     <>
       <h3>Si ya se encuentra registado, ingrese sus datos:</h3>
       <label>Email</label>
-      <input type="text" />
+      <input type="text" className={styles.inputMain} />
       <label>Contraseña</label>
-      <input type="password" />
+      <input type="password" className={styles.inputMain} />
       <button tpye="submit">Ingresar</button>
       <h4>
         O ingresar sin usuario haciendo click{" "}
