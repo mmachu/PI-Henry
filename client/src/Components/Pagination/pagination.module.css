@@ -1,0 +1,19 @@
+.paginationNav {
+  height: 4vh;
+  background-color: lightgreen;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.paginationItem {
+  margin: 0 1px;
+}

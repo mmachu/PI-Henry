@@ -1,0 +1,23 @@
+.dietList {
+  width: 100%;
+}
+
+.diet {
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Poppins", sans-serif;
+  color: black;
+}
+
+.filterContainer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10%;
+  height: auto;
+  background-color: lightgreen;
+}

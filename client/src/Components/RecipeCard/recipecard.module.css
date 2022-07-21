@@ -1,0 +1,7 @@
+.container {
+  display: flex;
+  margin: 0 4% 0 4%;
+  width: 35%;
+  height: 30%;
+  background-color: limegreen;
+}

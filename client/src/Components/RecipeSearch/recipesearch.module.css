@@ -1,62 +1,127 @@
-nav {
+.navStyle {
   width: 100%;
   height: 80px;
-  background-color: lightcyan;
+  background-color: rgba(73, 112, 29, 0.5);
   display: flex;
   flex-direction: row-reverse;
   font-family: "Poppins", sans-serif;
 }
 
+.container {
+  max-width: 1200px;
+  width: 100%;
+  height: 100%;
+  margin: 0px auto 0px auto;
+}
+
+.topBars {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 15vh;
+  background-color: lightcyan;
+}
+
+.navButtonsContainer {
+  position: relative;
+  display: flex;
+}
+
 .navButtons {
   width: 150px;
   height: 100%;
-  background-color: lightcoral;
   text-align: center;
-  border: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 20px;
+  font-weight: 200;
+  color: var(--yellow);
+  transition: background-color 0.2s ease-in;
+}
+
+.navButtons:hover {
+  cursor: pointer;
+  background-color: rgba(73, 112, 29, 0.5);
+  font-weight: 700;
 }
 
 .navName {
   width: calc(100% - 300px);
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   font-weight: 700;
+  word-wrap: break-word;
+  margin-left: 50px;
 }
 
-.navButtonsDescription {
-  font-size: 15px;
-  font-weight: 200;
-}
-
-.filterContainer {
-  width: 15%;
-  height: calc(100% - 80px);
-  background-color: lightpink;
-  display: flex;
-  justify-content: center;
+.title {
+  font-size: clamp(1.5rem, 5vw + 0.5rem, 2rem);
+  line-height: 1.5;
+  margin: 0;
+  color: var(--yellow);
 }
 
 .searchText {
+  padding-top: 5px;
+  font-size: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.searchBar {
   font-size: 25px;
   font-weight: 400;
   color: white;
   text-align: center;
+  width: 100%;
+  height: 75px;
+  background-color: lightcoral;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 }
 
-.filterInputContainer {
-  display: flex;
-  align-items: center;
+.searchButton {
+  margin: 0px;
+  padding: 7px 10px;
+  border-radius: 0;
 }
 
 .filterInput {
-  height: 25px;
+  height: 35px;
   border: none;
-  margin-left: 5px;
+  width: 200px;
+  font-family: "Poppins", sans-serif;
 }
 
 .filterInput:focus {
   outline: none;
+}
+
+.inputContainer {
+  margin-right: 15%;
+  width: 85%;
+  margin-bottom: 5px;
+}
+
+.dietFilterButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+}
+
+.dietFilterButtonContainer:hover {
+  cursor: pointer;
+}
+
+.dietFilterButton {
+  font-size: 15px;
+  height: 100%;
+  background-color: lightseagreen;
 }

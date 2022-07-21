@@ -17,7 +17,7 @@ h2 {
   color: var(--yellow);
 }
 
-p {
+.activities1 {
   font-size: clamp(1.5rem, 5vw + 0.5rem, 2rem);
   line-height: 1.5;
   margin: 0;
@@ -29,7 +29,7 @@ ul {
   color: var(--yellow);
 }
 
-li {
+.activities2 {
   display: flex;
   align-items: center;
   margin: 8px 0px 8px 0px;

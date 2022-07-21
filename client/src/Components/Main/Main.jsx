@@ -60,21 +60,21 @@ const Main = () => {
         <div className={styles.textContainer}>
           {/* <NavLink to="/index" style={{ textDecoration: "none", margin: "0px" }}> */}
           <h2>Food PI</h2>
-          <p>En esta pagina podras:</p>
+          <p className={styles.activites1}>En esta pagina podras:</p>
           <ul>
-            <li>
+            <li className={styles.activities2}>
               <MdSearch /> - Buscar recetas
             </li>
-            <li>
+            <li className={styles.activities2}>
               <SiCookiecutter /> - Ver el paso a paso de cada receta
             </li>
-            <li>
+            <li className={styles.activities2}>
               <TbFilter /> - Filtrar recetas por tipo de dieta
             </li>
-            <li>
+            <li className={styles.activities2}>
               <MdOutlineCreate /> - Crear tus propias recetas
             </li>
-            <li>
+            <li className={styles.activities2}>
               <TbDeviceFloppy /> - Guardar tus recetas favoritas
             </li>
           </ul>
