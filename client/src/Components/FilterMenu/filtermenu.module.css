@@ -5,13 +5,26 @@
 .diet {
   border-top: 1px solid #e0e0e0;
   border-top: 1px solid #e0e0e0;
-  margin-left: 10%;
-  margin-right: 10%;
-  width: 80%;
+  /* margin-left: 10%;
+  margin-right: 10%; */
+  width: 90%;
   display: flex;
   justify-content: space-between;
   font-family: "Poppins", sans-serif;
   color: black;
+}
+
+.ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1%;
+}
+
+.lastItem {
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .filterContainer {
@@ -19,7 +32,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 10%;
+  width: 12%;
   height: auto;
   background-color: var(--yellow);
 }

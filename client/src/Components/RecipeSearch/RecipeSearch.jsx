@@ -12,9 +12,29 @@ import styles from "./recipesearch.module.css";
 import FilterMenu from "../FilterMenu/FilterMenu.jsx";
 import SearchResults from "../SearchResults/SearchResults.jsx";
 import Pagination from "../Pagination/Pagination.jsx";
+const axios = require("axios").default;
 
 const RecipeSearch = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    axios
+      .get(`http://localhost:3001/recipes?name=${searchTerm}`)
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
+
+  const handleSearchTermLoad = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   const handleShowFilters = () => {
     let current = showFilters;
@@ -55,10 +75,15 @@ const RecipeSearch = () => {
           <div className={styles.searchContainer}>
             <p className={styles.searchText}>Buscar receta</p>
             <div className={styles.searchInput}>
-              <button className={styles.searchButton}>
+              <button className={styles.searchButton} onClick={handleSearch}>
                 <BsSearch />
               </button>
-              <input className={styles.filterInput} type="text" />
+              <input
+                className={styles.filterInput}
+                onChange={handleSearchTermLoad}
+                onKeyDown={handleEnter}
+                type="text"
+              />
             </div>
           </div>
           <div className={styles.orderContainer}>

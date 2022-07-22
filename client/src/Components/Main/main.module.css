@@ -2,6 +2,7 @@
   --yellow: rgb(255, 202, 104, 1);
   --orange: rgb(245, 187, 165, 1);
   --green: rgb(53, 97, 5, 1);
+  --fontPoppins: "Poppins", sans-serif;
 }
 
 * {

@@ -4,7 +4,7 @@ import styles from "./filtermenu.module.css";
 const FilterMenu = () => {
   return (
     <div id="test" className={styles.filterContainer}>
-      <ul className={styles.mainListItem}>
+      <ul className={styles.ul}>
         <li className={styles.diet}>
           Gluten Free
           <input
@@ -73,7 +73,7 @@ const FilterMenu = () => {
           Paleo
           <input type="checkbox" id="8" name="Paleo" value="8" checked></input>
         </li>
-        <li className={styles.diet}>
+        <li className={`${styles.diet} ${styles.lastItem}`}>
           Primal
           <input type="checkbox" id="9" name="Primal" value="9" checked></input>
         </li>
