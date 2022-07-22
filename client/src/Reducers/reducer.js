@@ -1,4 +1,9 @@
-import { LOAD_RECIPES, SELECT_RECIPE } from "../Actions/actions.js";
+import {
+  LOAD_RECIPES,
+  SELECT_RECIPE,
+  WIPE_RECIPES,
+  UNSELECT_RECIPE,
+} from "../Actions/actions.js";
 
 const initialState = {
   loadedRecipes: [],
@@ -16,6 +21,16 @@ export const rootReducer = (state = initialState, action) => {
       return {
         ...JSON.parse(JSON.stringify(state)),
         selectedRecipe: JSON.parse(JSON.stringify(action.payload)),
+      };
+    case WIPE_RECIPES:
+      return {
+        ...JSON.parse(JSON.stringify(state)),
+        loadedRecipes: [],
+      };
+    case UNSELECT_RECIPE:
+      return {
+        ...JSON.parse(JSON.stringify(state)),
+        selectedRecipe: null,
       };
   }
 };
