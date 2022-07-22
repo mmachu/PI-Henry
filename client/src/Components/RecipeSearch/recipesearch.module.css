@@ -67,7 +67,7 @@
 }
 
 .searchText {
-  padding-top: 5px;
+  /* padding-top: 5px; */
   font-size: 20px;
   font-family: "Poppins", sans-serif;
 }
@@ -77,23 +77,26 @@
   font-weight: 400;
   color: white;
   text-align: center;
+  display: grid;
+  grid-template-columns: 20% 60% 10% 10%;
   width: 100%;
-  height: 75px;
-  background-color: lightcoral;
+  background-color: var(--yellow);
+  /*height: 75px;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  flex-direction: row; */
 }
 
 .searchButton {
   margin: 0px;
-  padding: 7px 10px;
+  /* padding: 7px 10px; */
   border-radius: 0;
+  height: 100%;
 }
 
 .filterInput {
-  height: 35px;
+  /* height: 35px; */
   border: none;
   width: 200px;
   font-family: "Poppins", sans-serif;
@@ -103,17 +106,26 @@
   outline: none;
 }
 
-.inputContainer {
-  margin-right: 15%;
-  width: 85%;
-  margin-bottom: 5px;
+.searchInput {
+  display: flex;
+  flex-direction: row;
+}
+
+.searchContainer {
+  /* margin-right: 15%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
 }
 
 .dietFilterButtonContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 15%;
+  font-size: 20px;
+  /* width: 15%; */
 }
 
 .dietFilterButtonContainer:hover {
@@ -121,7 +133,48 @@
 }
 
 .dietFilterButton {
-  font-size: 15px;
   height: 100%;
-  background-color: lightseagreen;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orderTitle {
+  height: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.orderButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+}
+
+.orderButton {
+  width: 50%;
+  height: 100%;
+  font-size: 25px;
+  color: black;
+  transition: background-color 0.2s ease-in, color 0.2s ease-in;
+}
+
+.orderButton:hover {
+  cursor: pointer;
+  background-color: rgba(73, 112, 29, 0.5);
+  color: var(--yellow);
+}
+.orderContainer {
+  background-color: var(--yellow);
+  font-size: 10px;
+  color: black;
+  display: flex;
+  flex-direction: column;
 }

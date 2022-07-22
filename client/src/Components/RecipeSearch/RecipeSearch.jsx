@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineDown } from "react-icons/ai";
+import {
+  TbSortAscendingLetters,
+  TbSortDescendingLetters,
+  TbSortAscendingNumbers,
+  TbSortDescendingNumbers,
+} from "react-icons/tb";
 import styles from "./recipesearch.module.css";
 import FilterMenu from "../FilterMenu/FilterMenu.jsx";
 import SearchResults from "../SearchResults/SearchResults.jsx";
@@ -41,16 +47,41 @@ const RecipeSearch = () => {
               className={styles.dietFilterButton}
               onClick={handleShowFilters}
             >
-              Filtrar por dieta <AiOutlineDown />
+              <p>
+                Filtrar por dieta <AiOutlineDown />
+              </p>
             </div>
           </div>
-          <div className={styles.inputContainer}>
+          <div className={styles.searchContainer}>
             <p className={styles.searchText}>Buscar receta</p>
-
-            <button className={styles.searchButton}>
-              <BsSearch />
-            </button>
-            <input className={styles.filterInput} type="text" />
+            <div className={styles.searchInput}>
+              <button className={styles.searchButton}>
+                <BsSearch />
+              </button>
+              <input className={styles.filterInput} type="text" />
+            </div>
+          </div>
+          <div className={styles.orderContainer}>
+            <div className={styles.orderTitle}>Ordenar por Dieta</div>
+            <div className={styles.orderButtons}>
+              <div id="ascendingLetters" className={styles.orderButton}>
+                <TbSortAscendingLetters />
+              </div>
+              <div id="descendingLetters" className={styles.orderButton}>
+                <TbSortDescendingLetters />
+              </div>
+            </div>
+          </div>
+          <div className={styles.orderContainer}>
+            <div className={styles.orderTitle}>Ordenar por Health Score</div>
+            <div className={styles.orderButtons}>
+              <div id="ascendingNumbers" className={styles.orderButton}>
+                <TbSortAscendingNumbers />
+              </div>
+              <div id="ascendingNumbers" className={styles.orderButton}>
+                <TbSortDescendingNumbers />
+              </div>
+            </div>
           </div>
         </div>
       </div>

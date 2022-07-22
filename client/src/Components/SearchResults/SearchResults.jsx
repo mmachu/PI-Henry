@@ -14,6 +14,9 @@ const SearchResults = () => {
       <RecipeCard />
       <RecipeCard />
       <RecipeCard />
+      <RecipeCard />
+      <RecipeCard />
+      <RecipeCard />
       {/* </div> */}
     </div>
   );
