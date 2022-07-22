@@ -6,12 +6,16 @@ module.exports = (sequelize) => {
   sequelize.define(
     "recipe",
     {
-      recipe_id: {
+      id: {
         type: DataTypes.STRING,
         primaryKey: true,
       },
-      name: {
+      title: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.STRING(2048),
         allowNull: false,
       },
       description: {

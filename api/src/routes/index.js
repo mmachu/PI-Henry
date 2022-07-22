@@ -12,35 +12,37 @@ const router = Router();
 
 router.get("/recipes", async (req, res) => {
   const name = req.query.name;
+  console.log("ta por aca perrin");
   try {
     const recipes = await Recipe.findAll({
       where: {
-        name: {
+        title: {
           [Op.like]: `%${name}%`,
         },
       },
-      attributes: ["recipe_id", "name", "description"],
+      attributes: ["id", "title", "image", "h_lvl"],
       include: [
         { model: Diet, attributes: ["name"], through: { attributes: [] } },
       ],
     });
-    https.get(
-      `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=33ad83164c5b4a189915daf114101f1b&number=1`,
-      (resp) => {
-        let data = "";
-        resp
-          .on("data", (chunk) => {
-            data += chunk;
-          })
-          .on("end", () => {
-            if (recipes.length === 0 && data.results.length === 0) {
-              res.status(404).send("No se encontraron recetas");
-            }
-            let result = { spoonacular: JSON.parse(data), foodDB: recipes };
-            res.status(200).send(result);
-          });
-      }
-    );
+    res.status(200).send(recipes);
+    // https.get(
+    //   `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=33ad83164c5b4a189915daf114101f1b&number=1`,
+    //   (resp) => {
+    //     let data = "";
+    //     resp
+    //       .on("data", (chunk) => {
+    //         data += chunk;
+    //       })
+    //       .on("end", () => {
+    //         if (recipes.length === 0 && data.results.length === 0) {
+    //           res.status(404).send("No se encontraron recetas");
+    //         }
+    //         let result = { spoonacular: JSON.parse(data), foodDB: recipes };
+    //         res.status(200).send(result);
+    //       });
+    //   }
+    // );
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -98,7 +100,7 @@ router.get("/diets", async (req, res) => {
 });
 
 router.post("/recipes", async (req, res) => {
-  const { name, description, h_lvl, s_by_s, diets } = req.body;
+  const { title, description, image, h_lvl, s_by_s, diets } = req.body;
   try {
     const dietList = await Diet.findAll();
     const dietIDs = dietList.map((diet) => diet.id);
@@ -111,8 +113,9 @@ router.post("/recipes", async (req, res) => {
       }
     }
     const newRecipe = await Recipe.create({
-      recipe_id: (+new Date()).toString(36) + "food",
-      name: name,
+      id: (+new Date()).toString(36) + "food",
+      title: title,
+      image: image,
       description: description,
       h_lvl: h_lvl,
       s_by_s: s_by_s,
