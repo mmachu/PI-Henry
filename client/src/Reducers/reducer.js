@@ -1,5 +1,6 @@
 import {
   LOAD_RECIPES,
+  GET_RECIPES,
   SELECT_RECIPE,
   WIPE_RECIPES,
   UNSELECT_RECIPE,
@@ -10,12 +11,17 @@ const initialState = {
   selectedRecipe: null,
 };
 
-export const rootReducer = (state = initialState, action) => {
+export function rootReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_RECIPES:
+      console.log({ x: "Esto es el reducer", payload: action.payload });
       return {
         ...JSON.parse(JSON.stringify(state)),
         loadedRecipes: JSON.parse(JSON.stringify(action.payload)),
+      };
+    case GET_RECIPES:
+      return {
+        ...JSON.parse(JSON.stringify(state.loadedRecipes)),
       };
     case SELECT_RECIPE:
       return {
@@ -32,5 +38,9 @@ export const rootReducer = (state = initialState, action) => {
         ...JSON.parse(JSON.stringify(state)),
         selectedRecipe: null,
       };
+    default:
+      return {
+        ...JSON.parse(JSON.stringify(state)),
+      };
   }
-};
+}

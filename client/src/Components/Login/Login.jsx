@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "../Main/main.module.css";
 import { NavLink } from "react-router-dom";
-const Register = () => {
+const Login = ({ intervalID }) => {
+  const stopInterval = () => {
+    clearInterval(intervalID);
+  };
+
   return (
     <>
       <h3>Si ya se encuentra registado, ingrese sus datos:</h3>
@@ -12,10 +16,14 @@ const Register = () => {
       <button tpye="submit">Ingresar</button>
       <h4>
         O ingresar sin usuario haciendo click{" "}
-        {<NavLink to="/index">aqui</NavLink>}
+        {
+          <NavLink to="/index" onClick={stopInterval}>
+            aqui
+          </NavLink>
+        }
       </h4>
     </>
   );
 };
 
-export default Register;
+export default Login;

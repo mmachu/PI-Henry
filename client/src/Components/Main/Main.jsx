@@ -13,9 +13,6 @@ const Main = () => {
 
   useEffect(() => {
     setIntervalID(setInterval(changeBackground, 5000));
-    return () => {
-      clearInterval(intervalID);
-    };
   }, []);
 
   let imageID = 0;
@@ -100,7 +97,7 @@ const Main = () => {
             </div>
           </div>
           <form className={styles.userLogin} onSubmit={handleSubmit}>
-            {userSelection ? <Login /> : <Register />}
+            {userSelection ? <Login intervalID={intervalID} /> : <Register />}
           </form>
         </div>
       </div>

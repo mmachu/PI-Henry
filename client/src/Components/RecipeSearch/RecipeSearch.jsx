@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getLoadedRecipes, loadRecipes } from "../../Actions/actions.js";
 import { NavLink } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineDown } from "react-icons/ai";
@@ -17,12 +19,21 @@ const axios = require("axios").default;
 const RecipeSearch = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const recetitas = useSelector((state) => state.loadedRecipes);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getLoadedRecipes());
+  }, []);
 
   const handleSearch = () => {
     axios
       .get(`http://localhost:3001/recipes?name=${searchTerm}`)
       .then((res) => {
-        console.log(res.data);
+        dispatch(loadRecipes(res.data));
+      })
+      .then(() => {
+        console.log(recetitas);
       });
   };
 
