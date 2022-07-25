@@ -7,11 +7,11 @@ module.exports = (sequelize) => {
     "recipe",
     {
       id: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(36),
         primaryKey: true,
       },
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(50),
         allowNull: false,
       },
       image: {
@@ -19,14 +19,14 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1000),
         allowNull: false,
       },
-      h_lvl: {
-        type: DataTypes.NUMERIC,
+      healthScore: {
+        type: DataTypes.INTEGER,
       },
-      s_by_s: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
+      steps: {
+        type: DataTypes.ARRAY(DataTypes.JSON),
       },
       from: {
         type: DataTypes.VIRTUAL,

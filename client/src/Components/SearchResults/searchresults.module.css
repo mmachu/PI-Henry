@@ -2,9 +2,11 @@
   /* padding-top: 3vh; */
   padding: 1%;
   width: 98%;
-  height: 78vh;
+  height: 79vh;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+
   /*align-items: center; */
 }
 

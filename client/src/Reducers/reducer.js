@@ -9,6 +9,7 @@ import {
 const initialState = {
   loadedRecipes: [],
   selectedRecipe: null,
+  lastSearched: "",
 };
 
 export function rootReducer(state = initialState, action) {
@@ -20,6 +21,7 @@ export function rootReducer(state = initialState, action) {
         loadedRecipes: JSON.parse(JSON.stringify(action.payload)),
       };
     case GET_RECIPES:
+      console.log(...JSON.parse(JSON.stringify(state.loadedRecipes)));
       return {
         ...JSON.parse(JSON.stringify(state.loadedRecipes)),
       };

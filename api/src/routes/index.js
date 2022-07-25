@@ -12,7 +12,6 @@ const router = Router();
 
 router.get("/recipes", async (req, res) => {
   const name = req.query.name;
-  console.log("ta por aca perrin");
   try {
     const recipes = await Recipe.findAll({
       where: {
@@ -20,14 +19,15 @@ router.get("/recipes", async (req, res) => {
           [Op.like]: `%${name}%`,
         },
       },
-      attributes: ["id", "title", "image", "h_lvl"],
+      attributes: ["id", "title", "image", "healthScore"],
       include: [
         { model: Diet, attributes: ["name"], through: { attributes: [] } },
       ],
     });
     res.status(200).send(recipes);
+    //}
     // https.get(
-    //   `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=33ad83164c5b4a189915daf114101f1b&number=1`,
+    //   `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=33ad83164c5b4a189915daf114101f1b&number=1&addRecipeInformation=true`,
     //   (resp) => {
     //     let data = "";
     //     resp
@@ -35,11 +35,24 @@ router.get("/recipes", async (req, res) => {
     //         data += chunk;
     //       })
     //       .on("end", () => {
-    //         if (recipes.length === 0 && data.results.length === 0) {
+    //         const jsonData = JSON.parse(data);
+    //         const spoonacularResults = jsonData.results.map((recipe) => {
+    //           return {
+    //             id: recipe.id,
+    //             title: recipe.title,
+    //             image: recipe.image,
+    //             description: recipe.description,
+    //             diets: recipe.diets,
+    //             healthScore: recipe.healthScore,
+    //             steps: recipe.steps,
+    //           };
+    //         });
+
+    //         if (recipes.length === 0 && spoonacularResults.length === 0) {
     //           res.status(404).send("No se encontraron recetas");
     //         }
-    //         let result = { spoonacular: JSON.parse(data), foodDB: recipes };
-    //         res.status(200).send(result);
+    //         let results = [...spoonacularResults, ...recipes];
+    //         res.status(200).send(results);
     //       });
     //   }
     // );
@@ -65,7 +78,7 @@ router.get("/recipes/:id", async (req, res) => {
       }
     } else {
       https.get(
-        `https://api.spoonacular.com/recipes/${id}?information&apiKey=${process.env.API_KEY}&addRecipeInformation=true`,
+        `https://api.spoonacular.com/recipes/${id}?apiKey=${process.env.API_KEY}&addRecipeInformation=true`,
         (resp) => {
           if (resp.statusCode === 404) {
             res.status(404).send("No se encontró la receta");
@@ -100,7 +113,7 @@ router.get("/diets", async (req, res) => {
 });
 
 router.post("/recipes", async (req, res) => {
-  const { title, description, image, h_lvl, s_by_s, diets } = req.body;
+  const { title, description, image, healthScore, steps, diets } = req.body;
   try {
     const dietList = await Diet.findAll();
     const dietIDs = dietList.map((diet) => diet.id);
@@ -117,8 +130,8 @@ router.post("/recipes", async (req, res) => {
       title: title,
       image: image,
       description: description,
-      h_lvl: h_lvl,
-      s_by_s: s_by_s,
+      healthScore: healthScore,
+      steps: steps,
     });
     newRecipe.addDiet(dietsIdsToAdd);
     res.status(201).send(newRecipe);

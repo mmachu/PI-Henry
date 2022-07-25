@@ -1,35 +1,56 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styles from "./pagination.module.css";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 
-const Pagination = () => {
+const Pagination = ({ handlePageChange, currentPage }) => {
+  const recipes = useSelector((state) => state.loadedRecipes);
+
+  const handlePageAmount = () => {
+    const pagesAmount = Math.ceil(recipes.length / 9);
+    const pagesAmountArr = [];
+    for (let i = 0; i < pagesAmount; i++) {
+      pagesAmountArr.push(i + 1);
+    }
+    return pagesAmountArr.map((pageNumber) => {
+      return (
+        <li
+          key={pageNumber}
+          onClick={() => handlePageChange(pageNumber)}
+          className={`${styles.paginationItem} ${
+            pageNumber === currentPage ? styles.activePage : ""
+          }`}
+        >
+          {pageNumber}
+        </li>
+      );
+    });
+  };
+
+  const goToFirstPage = () => {
+    handlePageChange(1);
+  };
+
+  const goToLastPage = () => {
+    handlePageChange(Math.ceil(recipes.length / 9));
+  };
+
   return (
     <nav className={styles.paginationNav} aria-label="pagination">
       <ul className={styles.pagination}>
-        <li className={styles.paginationItem}>
-          <a href="">
+        {recipes && (
+          <li onClick={goToFirstPage} className={styles.paginationItem}>
             <span aria-hidden="true">«</span>
-          </a>
-        </li>
-        <li className={styles.paginationItem}>
-          <a href="">1</a>
-        </li>
-        <li className={styles.paginationItem}>
-          <a href="" aria-current="page">
-            2
-          </a>
-        </li>
-        <li className={styles.paginationItem}>
-          <a href="">3</a>
-        </li>
-        <li className={styles.paginationItem}>
-          <a href="">4</a>
-        </li>
-        <li className={styles.paginationItem}>
-          <a href="">
+          </li>
+        )}
+
+        {handlePageAmount()}
+
+        {recipes && (
+          <li onClick={goToLastPage} className={styles.paginationItem}>
             <span aria-hidden="true">»</span>
-          </a>
-        </li>
+          </li>
+        )}
       </ul>
     </nav>
   );

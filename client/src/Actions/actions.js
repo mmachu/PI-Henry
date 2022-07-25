@@ -5,8 +5,12 @@ export const WIPE_RECIPES = "WIPE_RECIPES";
 export const UNSELECT_RECIPE = "UNSELECT_RECIPE";
 
 export function loadRecipes(recipes) {
-  return function (dispatch) {
-    return dispatch({ type: LOAD_RECIPES, payload: recipes });
+  // return function (dispatch) {
+  //   return dispatch({ type: LOAD_RECIPES, payload: recipes });
+  // };
+  return {
+    type: LOAD_RECIPES,
+    payload: recipes,
   };
 }
 

@@ -2,14 +2,23 @@ import React from "react";
 import styles from "./recipecard.module.css";
 import imagen from "../../assets/test.jpg";
 
-const RecipeCard = () => {
+const RecipeCard = ({ recipe }) => {
+  const mapDiets = () => {
+    const dietNames = recipe?.diets?.map((diet) => diet.name);
+    return dietNames.join(" | ");
+  };
+
   return (
-    <div className={styles.container}>
+    <div key={recipe && recipe.id} className={styles.container}>
       <div className={styles.recipePictureContainer}>
-        <img className={styles.recipeImage} alt="" src={imagen} />{" "}
+        <img
+          className={styles.recipeImage}
+          alt=""
+          src={recipe && recipe.image}
+        />{" "}
       </div>
-      <div className={styles.recipeTitle}>Aca va el titulo</div>
-      <div className={styles.recipeDiets}>Aca va la descripcion</div>
+      <div className={styles.recipeTitle}>{recipe && recipe.title}</div>
+      <div className={styles.recipeDiets}>{mapDiets()}</div>
     </div>
   );
 };

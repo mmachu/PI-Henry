@@ -1,3 +1,12 @@
+.background {
+  min-height: 100vh;
+  background-image: url("fondito.jpg");
+  background-size: cover;
+  color: white;
+  display: flex;
+  isolation: isolate;
+}
+
 .navStyle {
   width: 100%;
   height: 80px;
@@ -22,7 +31,7 @@
   align-items: center;
   width: 100%;
   height: 15vh;
-  background-color: lightcyan;
+  /* background-color: lightcyan; */
 }
 
 .navButtonsContainer {
@@ -171,6 +180,17 @@
   background-color: rgba(73, 112, 29, 0.5);
   color: var(--yellow);
 }
+
+.orderButtonActive {
+  background-color: rgba(236, 137, 71, 0.5);
+  color: rgba(73, 112, 29, 1);
+}
+
+.orderButtonActive:hover {
+  background-color: rgba(236, 137, 71, 0.5);
+  color: var(--yellow);
+}
+
 .orderContainer {
   background-color: var(--yellow);
   font-size: 10px;

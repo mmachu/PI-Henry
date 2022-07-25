@@ -19,23 +19,21 @@ const axios = require("axios").default;
 const RecipeSearch = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const recetitas = useSelector((state) => state.loadedRecipes);
+  const [selectedPage, setSelectedPage] = useState(null);
+  const recipes = useSelector((state) => state.loadedRecipes);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getLoadedRecipes());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getLoadedRecipes());
+  // }, []);
 
-  const handleSearch = () => {
-    axios
+  async function handleSearch() {
+    await axios
       .get(`http://localhost:3001/recipes?name=${searchTerm}`)
       .then((res) => {
         dispatch(loadRecipes(res.data));
-      })
-      .then(() => {
-        console.log(recetitas);
       });
-  };
+  }
 
   const handleSearchTermLoad = (e) => {
     setSearchTerm(e.target.value);
@@ -52,78 +50,178 @@ const RecipeSearch = () => {
     setShowFilters(!current);
   };
 
+  const sortTitleAsc = async (e) => {
+    recipes.sort((a, b) => {
+      return a.title < b.title ? -1 : 1;
+    });
+    dispatch(loadRecipes(recipes));
+    changeActiveFilter(e.currentTarget.id);
+  };
+
+  const sortTitleDesc = async (e) => {
+    recipes.sort((a, b) => {
+      return a.title < b.title ? -1 : 1;
+    });
+    recipes.reverse();
+    dispatch(loadRecipes(recipes));
+    changeActiveFilter(e.currentTarget.id);
+  };
+
+  const sortHealthAsc = async (e) => {
+    recipes.sort((a, b) => {
+      return a.healthScore - b.healthScore;
+    });
+    dispatch(loadRecipes(recipes));
+    changeActiveFilter(e.currentTarget.id);
+  };
+
+  const sortHealthDesc = async (e) => {
+    recipes.sort((a, b) => {
+      return a.healthScore - b.healthScore;
+    });
+    recipes.reverse();
+    dispatch(loadRecipes(recipes));
+    changeActiveFilter(e.currentTarget.id);
+  };
+
+  const changeActiveFilter = (id) => {
+    let current = document.getElementsByClassName(
+      `${styles.orderButtonActive}`
+    );
+    current[0].classList.remove(`${styles.orderButtonActive}`);
+    document.getElementById(id).classList.add(`${styles.orderButtonActive}`);
+
+    // console.log(`el id es ${id}`);
+    // switch (id) {
+    //   case "ascTitle":
+    //     document
+    //       .getElementById("descTitle")
+    //       .classList.remove(`${styles.orderButtonActive}`);
+    //     document
+    //       .getElementById("ascTitle")
+    //       .classList.add(`${styles.orderButtonActive}`);
+    //     break;
+    //   case "descTitle":
+    //     document
+    //       .getElementById("ascTitle")
+    //       .classList.remove(`${styles.orderButtonActive}`);
+    //     document
+    //       .getElementById("descTitle")
+    //       .classList.add(`${styles.orderButtonActive}`);
+    //     break;
+    //   case "ascHealth":
+    //     document
+    //       .getElementById("descHealth")
+    //       .classList.remove(`${styles.orderButtonActive}`);
+    //     document
+    //       .getElementById("ascHealth")
+    //       .classList.add(`${styles.orderButtonActive}`);
+    //     break;
+    //   case "descHealth":
+    //     document
+    //       .getElementById("ascHealth")
+    //       .classList.remove(`${styles.orderButtonActive}`);
+    //     document
+    //       .getElementById("descHealth")
+    //       .classList.add(`${styles.orderButtonActive}`);
+    //     break;
+    //   default:
+    //     break;
+    // }
+  };
+
   const falsoID = 1;
   return (
-    <div className={styles.container}>
-      <div className={styles.topBars}>
-        <nav className={styles.navStyle}>
-          <div className={styles.navButtonsContainer}>
-            <div className={styles.navButtons}>
-              <p>Favoritos</p>
-            </div>
-            <div className={styles.navButtons}>
-              <p>Crear Receta</p>
-            </div>
-            <div className={styles.navButtons}>
-              <p>Ingresar Registrarse</p>
-            </div>
-          </div>
-          <div className={styles.navName}>
-            <p className={styles.title}>Food PI</p>
-          </div>
-        </nav>
-        <div className={styles.searchBar}>
-          <div className={styles.dietFilterButtonContainer}>
-            <div
-              className={styles.dietFilterButton}
-              onClick={handleShowFilters}
-            >
-              <p>
-                Filtrar por dieta <AiOutlineDown />
-              </p>
-            </div>
-          </div>
-          <div className={styles.searchContainer}>
-            <p className={styles.searchText}>Buscar receta</p>
-            <div className={styles.searchInput}>
-              <button className={styles.searchButton} onClick={handleSearch}>
-                <BsSearch />
-              </button>
-              <input
-                className={styles.filterInput}
-                onChange={handleSearchTermLoad}
-                onKeyDown={handleEnter}
-                type="text"
-              />
-            </div>
-          </div>
-          <div className={styles.orderContainer}>
-            <div className={styles.orderTitle}>Ordenar por Dieta</div>
-            <div className={styles.orderButtons}>
-              <div id="ascendingLetters" className={styles.orderButton}>
-                <TbSortAscendingLetters />
+    <div className={styles.background}>
+      <div className={styles.container}>
+        <div className={styles.topBars}>
+          <nav className={styles.navStyle}>
+            <div className={styles.navButtonsContainer}>
+              <div className={styles.navButtons}>
+                <p>Favoritos</p>
               </div>
-              <div id="descendingLetters" className={styles.orderButton}>
-                <TbSortDescendingLetters />
+              <div className={styles.navButtons}>
+                <p>Crear Receta</p>
+              </div>
+              <div className={styles.navButtons}>
+                <p>Ingresar Registrarse</p>
               </div>
             </div>
-          </div>
-          <div className={styles.orderContainer}>
-            <div className={styles.orderTitle}>Ordenar por Health Score</div>
-            <div className={styles.orderButtons}>
-              <div id="ascendingNumbers" className={styles.orderButton}>
-                <TbSortAscendingNumbers />
+            <div className={styles.navName}>
+              <p className={styles.title}>Food PI</p>
+            </div>
+          </nav>
+          <div className={styles.searchBar}>
+            <div className={styles.dietFilterButtonContainer}>
+              <div
+                className={styles.dietFilterButton}
+                onClick={handleShowFilters}
+              >
+                <p>
+                  Filtrar por dieta <AiOutlineDown />
+                </p>
               </div>
-              <div id="ascendingNumbers" className={styles.orderButton}>
-                <TbSortDescendingNumbers />
+            </div>
+            <div className={styles.searchContainer}>
+              <p className={styles.searchText}>Buscar receta</p>
+              <div className={styles.searchInput}>
+                <button className={styles.searchButton} onClick={handleSearch}>
+                  <BsSearch />
+                </button>
+                <input
+                  className={styles.filterInput}
+                  onChange={handleSearchTermLoad}
+                  onKeyDown={handleEnter}
+                  type="text"
+                />
+              </div>
+            </div>
+            <div className={styles.orderContainer}>
+              <div className={styles.orderTitle}>Ordenar por Dieta</div>
+              <div className={styles.orderButtons}>
+                <div
+                  id="ascTitle"
+                  onClick={(e) => sortTitleAsc(e)}
+                  className={`${styles.orderButton} ${
+                    recipes?.length !== 0 ? styles.orderButtonActive : ""
+                  }`}
+                >
+                  <TbSortAscendingLetters />
+                </div>
+                <div
+                  id="descTitle"
+                  onClick={(e) => sortTitleDesc(e)}
+                  className={styles.orderButton}
+                >
+                  <TbSortDescendingLetters />
+                </div>
+              </div>
+            </div>
+            <div className={styles.orderContainer}>
+              <div className={styles.orderTitle}>Ordenar por Health Score</div>
+              <div className={styles.orderButtons}>
+                <div
+                  id="ascHealth"
+                  onClick={(e) => sortHealthAsc(e)}
+                  className={styles.orderButton}
+                >
+                  <TbSortAscendingNumbers />
+                </div>
+                <div
+                  id="descHealth"
+                  onClick={(e) => sortHealthDesc(e)}
+                  className={styles.orderButton}
+                >
+                  <TbSortDescendingNumbers />
+                </div>
               </div>
             </div>
           </div>
         </div>
+        {showFilters && <FilterMenu />}
+        <SearchResults recipes={recipes} />
+        {/* <Pagination /> */}
       </div>
-      {showFilters && <FilterMenu />}
-      <SearchResults />
-      <Pagination />
     </div>
   );
 };
