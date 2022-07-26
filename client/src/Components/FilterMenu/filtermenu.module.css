@@ -36,3 +36,16 @@
   height: auto;
   background-color: var(--yellow);
 }
+
+.closeFilters {
+  display: flex;
+  background-color: rgba(240, 42, 42, 0.5);
+  justify-content: center;
+  align-items: center;
+  color: var(--yellow);
+  width: 100%;
+}
+
+.closeFilters:hover {
+  cursor: pointer;
+}

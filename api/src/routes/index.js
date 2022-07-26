@@ -10,6 +10,15 @@ const router = Router();
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
+router.get("/diets", async (req, res) => {
+  try {
+    const diets = await Diet.findAll();
+    res.status(200).send(diets);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.get("/recipes", async (req, res) => {
   const name = req.query.name;
   try {

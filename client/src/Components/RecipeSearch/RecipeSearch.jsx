@@ -20,12 +20,21 @@ const RecipeSearch = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPage, setSelectedPage] = useState(null);
+  const [selectedDiets, setSelectedDiets] = useState([]);
   const recipes = useSelector((state) => state.loadedRecipes);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(getLoadedRecipes());
-  // }, []);
+  useEffect(async () => {
+    await axios
+      .get("http://localhost:3001/diets")
+      .then((res) => {
+        console.log(res.data);
+        setSelectedDiets(res.data);
+      })
+      .catch((err) => {
+        window.alert(err.message);
+      });
+  }, []);
 
   async function handleSearch() {
     await axios
@@ -218,7 +227,7 @@ const RecipeSearch = () => {
             </div>
           </div>
         </div>
-        {showFilters && <FilterMenu />}
+        {showFilters && <FilterMenu handleShowFilters={handleShowFilters} />}
         <SearchResults recipes={recipes} />
         {/* <Pagination /> */}
       </div>
