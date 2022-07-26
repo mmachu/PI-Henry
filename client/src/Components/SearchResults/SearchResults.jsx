@@ -4,7 +4,7 @@ import styles from "./searchresults.module.css";
 import RecipeCard from "../RecipeCard/RecipeCard.jsx";
 import Pagination from "../Pagination/Pagination.jsx";
 
-const SearchResults = () => {
+const SearchResults = ({ selectedDiets }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const recipes = useSelector((state) => state.loadedRecipes);
   const handlePageChange = (pageNumber) => {
@@ -16,11 +16,19 @@ const SearchResults = () => {
     const indexOfFirstRecipe = indexOfLastRecipe - 9;
     const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
     return currentRecipes.map((recipe, i) => {
-      return (
-        <div key={recipe + i} className={styles.recipeCard}>
-          <RecipeCard recipe={recipe} />
-        </div>
+      let recipeDietNames = recipe.diets.map((diet) => diet.name);
+      let selectedDietNames = selectedDiets.map((diet) => diet.name);
+      let hasDiet = recipeDietNames.filter((diet) =>
+        selectedDietNames.includes(diet)
       );
+      console.log(hasDiet);
+      if (hasDiet.length > 0) {
+        return (
+          <div key={recipe + i} className={styles.recipeCard}>
+            <RecipeCard recipe={recipe} />
+          </div>
+        );
+      }
     });
   };
 

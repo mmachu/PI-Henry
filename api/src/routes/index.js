@@ -33,6 +33,10 @@ router.get("/recipes", async (req, res) => {
         { model: Diet, attributes: ["name"], through: { attributes: [] } },
       ],
     });
+    //console.log(JSON.parse(JSON.stringify(recipes)));
+    recipes.sort((a, b) => {
+      return a.title < b.title ? -1 : 1;
+    });
     res.status(200).send(recipes);
     //}
     // https.get(

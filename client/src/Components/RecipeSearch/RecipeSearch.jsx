@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getLoadedRecipes, loadRecipes } from "../../Actions/actions.js";
+import {
+  getLoadedRecipes,
+  loadRecipes,
+  loadDiets,
+  lastRecipeSearch,
+} from "../../Actions/actions.js";
 import { NavLink } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineDown } from "react-icons/ai";
@@ -13,7 +18,6 @@ import {
 import styles from "./recipesearch.module.css";
 import FilterMenu from "../FilterMenu/FilterMenu.jsx";
 import SearchResults from "../SearchResults/SearchResults.jsx";
-import Pagination from "../Pagination/Pagination.jsx";
 const axios = require("axios").default;
 
 const RecipeSearch = () => {
@@ -22,17 +26,18 @@ const RecipeSearch = () => {
   const [selectedPage, setSelectedPage] = useState(null);
   const [selectedDiets, setSelectedDiets] = useState([]);
   const recipes = useSelector((state) => state.loadedRecipes);
+
   const dispatch = useDispatch();
 
   useEffect(async () => {
     await axios
       .get("http://localhost:3001/diets")
       .then((res) => {
-        console.log(res.data);
-        setSelectedDiets(res.data);
+        dispatch(loadDiets(res.data));
+        setSelectedDiets([...res.data]);
       })
       .catch((err) => {
-        window.alert(err.message);
+        window.alert(`Error al cargar las dietas: ${err.message}`);
       });
   }, []);
 
@@ -60,83 +65,55 @@ const RecipeSearch = () => {
   };
 
   const sortTitleAsc = async (e) => {
-    recipes.sort((a, b) => {
-      return a.title < b.title ? -1 : 1;
-    });
-    dispatch(loadRecipes(recipes));
-    changeActiveFilter(e.currentTarget.id);
+    if (recipes?.length > 0) {
+      recipes.sort((a, b) => {
+        return a.title < b.title ? -1 : 1;
+      });
+      dispatch(loadRecipes(recipes));
+      changeActiveFilter(e.currentTarget.id);
+    }
   };
 
   const sortTitleDesc = async (e) => {
-    recipes.sort((a, b) => {
-      return a.title < b.title ? -1 : 1;
-    });
-    recipes.reverse();
-    dispatch(loadRecipes(recipes));
-    changeActiveFilter(e.currentTarget.id);
+    if (recipes?.length > 0) {
+      recipes.sort((a, b) => {
+        return a.title < b.title ? -1 : 1;
+      });
+      recipes.reverse();
+      dispatch(loadRecipes(recipes));
+      changeActiveFilter(e.currentTarget.id);
+    }
   };
 
   const sortHealthAsc = async (e) => {
-    recipes.sort((a, b) => {
-      return a.healthScore - b.healthScore;
-    });
-    dispatch(loadRecipes(recipes));
-    changeActiveFilter(e.currentTarget.id);
+    if (recipes?.length > 0) {
+      recipes.sort((a, b) => {
+        return a.healthScore - b.healthScore;
+      });
+      dispatch(loadRecipes(recipes));
+      changeActiveFilter(e.currentTarget.id);
+    }
   };
 
   const sortHealthDesc = async (e) => {
-    recipes.sort((a, b) => {
-      return a.healthScore - b.healthScore;
-    });
-    recipes.reverse();
-    dispatch(loadRecipes(recipes));
-    changeActiveFilter(e.currentTarget.id);
+    if (recipes?.length > 0) {
+      recipes.sort((a, b) => {
+        return a.healthScore - b.healthScore;
+      });
+      recipes.reverse();
+      dispatch(loadRecipes(recipes));
+      changeActiveFilter(e.currentTarget.id);
+    }
   };
 
   const changeActiveFilter = (id) => {
-    let current = document.getElementsByClassName(
-      `${styles.orderButtonActive}`
-    );
-    current[0].classList.remove(`${styles.orderButtonActive}`);
-    document.getElementById(id).classList.add(`${styles.orderButtonActive}`);
-
-    // console.log(`el id es ${id}`);
-    // switch (id) {
-    //   case "ascTitle":
-    //     document
-    //       .getElementById("descTitle")
-    //       .classList.remove(`${styles.orderButtonActive}`);
-    //     document
-    //       .getElementById("ascTitle")
-    //       .classList.add(`${styles.orderButtonActive}`);
-    //     break;
-    //   case "descTitle":
-    //     document
-    //       .getElementById("ascTitle")
-    //       .classList.remove(`${styles.orderButtonActive}`);
-    //     document
-    //       .getElementById("descTitle")
-    //       .classList.add(`${styles.orderButtonActive}`);
-    //     break;
-    //   case "ascHealth":
-    //     document
-    //       .getElementById("descHealth")
-    //       .classList.remove(`${styles.orderButtonActive}`);
-    //     document
-    //       .getElementById("ascHealth")
-    //       .classList.add(`${styles.orderButtonActive}`);
-    //     break;
-    //   case "descHealth":
-    //     document
-    //       .getElementById("ascHealth")
-    //       .classList.remove(`${styles.orderButtonActive}`);
-    //     document
-    //       .getElementById("descHealth")
-    //       .classList.add(`${styles.orderButtonActive}`);
-    //     break;
-    //   default:
-    //     break;
-    // }
+    if (recipes?.length > 0) {
+      let current = document.getElementsByClassName(
+        `${styles.orderButtonActive}`
+      );
+      current[0].classList.remove(`${styles.orderButtonActive}`);
+      document.getElementById(id).classList.add(`${styles.orderButtonActive}`);
+    }
   };
 
   const falsoID = 1;
@@ -152,9 +129,11 @@ const RecipeSearch = () => {
               <div className={styles.navButtons}>
                 <p>Crear Receta</p>
               </div>
-              <div className={styles.navButtons}>
-                <p>Ingresar Registrarse</p>
-              </div>
+              <NavLink to="/">
+                <div className={styles.navButtons}>
+                  <p>Ingresar Registrarse</p>
+                </div>
+              </NavLink>
             </div>
             <div className={styles.navName}>
               <p className={styles.title}>Food PI</p>
@@ -162,14 +141,16 @@ const RecipeSearch = () => {
           </nav>
           <div className={styles.searchBar}>
             <div className={styles.dietFilterButtonContainer}>
-              <div
-                className={styles.dietFilterButton}
-                onClick={handleShowFilters}
-              >
-                <p>
-                  Filtrar por dieta <AiOutlineDown />
-                </p>
-              </div>
+              {recipes?.length > 0 && (
+                <div
+                  className={styles.dietFilterButton}
+                  onClick={handleShowFilters}
+                >
+                  <p>
+                    Filtrar por dieta <AiOutlineDown />
+                  </p>
+                </div>
+              )}
             </div>
             <div className={styles.searchContainer}>
               <p className={styles.searchText}>Buscar receta</p>
@@ -182,6 +163,7 @@ const RecipeSearch = () => {
                   onChange={handleSearchTermLoad}
                   onKeyDown={handleEnter}
                   type="text"
+                  value={searchTerm}
                 />
               </div>
             </div>
@@ -227,9 +209,14 @@ const RecipeSearch = () => {
             </div>
           </div>
         </div>
-        {showFilters && <FilterMenu handleShowFilters={handleShowFilters} />}
-        <SearchResults recipes={recipes} />
-        {/* <Pagination /> */}
+        {showFilters && (
+          <FilterMenu
+            handleShowFilters={handleShowFilters}
+            selectedDiets={selectedDiets}
+            setSelectedDiets={setSelectedDiets}
+          />
+        )}
+        <SearchResults selectedDiets={selectedDiets} />
       </div>
     </div>
   );
