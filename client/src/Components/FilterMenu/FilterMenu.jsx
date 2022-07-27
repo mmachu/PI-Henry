@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "./filtermenu.module.css";
 
@@ -8,33 +8,51 @@ const FilterMenu = ({ handleShowFilters, selectedDiets, setSelectedDiets }) => {
     new Array(diets.length).fill(true)
   );
 
+  useEffect(() => {
+    let updatedIsChecked = [];
+    diets.forEach((diet, index) => {
+      if (selectedDiets.includes(diet)) {
+        updatedIsChecked.push(true);
+      } else {
+        updatedIsChecked.push(false);
+      }
+    });
+    setIsChecked([...updatedIsChecked]);
+  }, []);
+
   const handleOnChange = (i, diet) => {
     let updatedChecked = isChecked.map((item, index) =>
       index === i ? !item : item
     );
-    let what = [...selectedDiets, diet.name];
-    console.log(what);
-    console.log(`Diet.name es ${diet.name}`);
     if (updatedChecked[i] === false) {
-      let test = selectedDiets.filter((d) => d.name !== diet.name);
-      setSelectedDiets([...test]);
+      let newSelectedDiets = selectedDiets.filter((d) => d !== diet);
+      setSelectedDiets([...newSelectedDiets]);
     } else {
-      console.log("entro al else");
-      setSelectedDiets([...selectedDiets, { id: i, name: diet.name }]);
+      let newSelectedDiets = [...selectedDiets, diet];
+      setSelectedDiets([...newSelectedDiets]);
     }
     setIsChecked(updatedChecked);
   };
 
+  const renderDietName = (diet) => {
+    let splitDiet = diet.split(" ");
+    let pascalCaseDiets = splitDiet.map((lowerCaseDiet) => {
+      return lowerCaseDiet.charAt(0).toUpperCase() + lowerCaseDiet.slice(1);
+    });
+    return pascalCaseDiets.join(" ");
+  };
+
   const renderDiets = () => {
+    console.log(selectedDiets);
     return diets.map((diet, i) => {
       return (
-        <li key={diet.name} className={styles.diet}>
-          {diet.name}
+        <li key={diet} className={styles.diet}>
+          {renderDietName(diet)}
           <input
             checked={isChecked[i]}
             type="checkbox"
             id={diet.id}
-            name={diet.name}
+            name={diet}
             value={diet.id}
             onChange={() => handleOnChange(i, diet)}
           ></input>
@@ -47,73 +65,6 @@ const FilterMenu = ({ handleShowFilters, selectedDiets, setSelectedDiets }) => {
     <div id="test" className={styles.filterContainer}>
       <ul className={styles.ul}>
         {renderDiets()}
-        {/* <li className={styles.diet}>
-          Gluten Free
-          <input type="checkbox" id="1" name="Gluten Free" value="1"></input>
-        </li>
-        <li className={styles.diet}>
-          Ketogenic
-          <input
-            checked
-            type="checkbox"
-            id="2"
-            name="Ketogenic"
-            value="2"
-          ></input>
-        </li>
-        <li className={styles.diet}>
-          Vegetarian
-          <input
-            checked
-            type="checkbox"
-            id="3"
-            name="Vegetarian"
-            value="3"
-          ></input>
-        </li>
-        <li className={styles.diet}>
-          Lacto-Vegetarian
-          <input
-            checked
-            type="checkbox"
-            id="4"
-            name="Lacto-Vegetarian"
-            value="4"
-          ></input>
-        </li>
-        <li className={styles.diet}>
-          Ovo-Vegetarian
-          <input
-            checked
-            type="checkbox"
-            id="5"
-            name="Ovo-Vegetarian"
-            value="5"
-          ></input>
-        </li>
-        <li className={styles.diet}>
-          Vegan
-          <input checked type="checkbox" id="6" name="Vegan" value="6"></input>
-        </li>
-        <li className={styles.diet}>
-          Pescetarian
-          <input
-            checked
-            type="checkbox"
-            id="7"
-            name="Pescetarian"
-            value="7"
-          ></input>
-        </li>
-        <li className={styles.diet}>
-          Paleo
-          <input checked type="checkbox" id="8" name="Paleo" value="8"></input>
-        </li>
-        <li className={`${styles.diet} `}>
-          Primal
-          <input checked type="checkbox" id="9" name="Primal" value="9"></input>
-        </li>
-        */}
         <li
           onClick={handleShowFilters}
           className={`${styles.diet} ${styles.lastItem} ${styles.closeFilters}`}

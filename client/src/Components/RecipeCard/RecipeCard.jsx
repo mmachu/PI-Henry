@@ -1,15 +1,26 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styles from "./recipecard.module.css";
 import imagen from "../../assets/test.jpg";
 
 const RecipeCard = ({ recipe }) => {
   const mapDiets = () => {
-    const dietNames = recipe?.diets?.map((diet) => diet.name);
-    return dietNames.join(" | ");
+    if (recipe.diets.length === 0)
+      return "No hay informacion de dietas para este plato";
+    //const dietNames = recipe?.diets?.map((diet) => diet);
+    // return dietNames.join(" | ");
+    let dietsFormatted = recipe?.diets?.map((diet) => {
+      let dietArr = diet.split(" ");
+      let dietPascal = dietArr.map((dietP) => {
+        return dietP.charAt(0).toUpperCase() + dietP.slice(1);
+      });
+      return dietPascal.join(" ");
+    });
+    return dietsFormatted.join(" | ");
   };
-
   return (
-    <div key={recipe && recipe.id} className={styles.container}>
+    <NavLink className={styles.container} to={`/recipe/${recipe.id}`}>
+      {/* <div key={recipe && recipe.id} className={styles.container}> */}
       <div className={styles.recipePictureContainer}>
         <img
           className={styles.recipeImage}
@@ -19,7 +30,8 @@ const RecipeCard = ({ recipe }) => {
       </div>
       <div className={styles.recipeTitle}>{recipe && recipe.title}</div>
       <div className={styles.recipeDiets}>{mapDiets()}</div>
-    </div>
+      {/* </div> */}
+    </NavLink>
   );
 };
 

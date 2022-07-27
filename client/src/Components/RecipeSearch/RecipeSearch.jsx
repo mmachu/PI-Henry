@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getLoadedRecipes,
-  loadRecipes,
-  loadDiets,
-  lastRecipeSearch,
-} from "../../Actions/actions.js";
+import { loadRecipes, loadDiets } from "../../Actions/actions.js";
 import { NavLink } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineDown } from "react-icons/ai";
@@ -23,29 +18,34 @@ const axios = require("axios").default;
 const RecipeSearch = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedPage, setSelectedPage] = useState(null);
   const [selectedDiets, setSelectedDiets] = useState([]);
   const recipes = useSelector((state) => state.loadedRecipes);
 
   const dispatch = useDispatch();
 
-  useEffect(async () => {
-    await axios
-      .get("http://localhost:3001/diets")
-      .then((res) => {
-        dispatch(loadDiets(res.data));
-        setSelectedDiets([...res.data]);
-      })
-      .catch((err) => {
-        window.alert(`Error al cargar las dietas: ${err.message}`);
-      });
-  }, []);
+  // useEffect(async () => {
+  //   await axios
+  //     .get("http://localhost:3001/diets")
+  //     .then((res) => {
+  //       dispatch(loadDiets(res.data));
+  //       setSelectedDiets([...res.data]);
+  //     })
+  //     .catch((err) => {
+  //       window.alert(`Error al cargar las dietas: ${err.message}`);
+  //     });
+  // }, []);
 
   async function handleSearch() {
     await axios
       .get(`http://localhost:3001/recipes?name=${searchTerm}`)
       .then((res) => {
+        let diets = res.data.pop();
+        dispatch(loadDiets(diets));
         dispatch(loadRecipes(res.data));
+        setSelectedDiets([...diets]);
+      })
+      .catch((err) => {
+        window.alert(`Error al cargar las recetas: ${err.message}`);
       });
   }
 
