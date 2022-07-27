@@ -23,18 +23,6 @@ const RecipeSearch = () => {
 
   const dispatch = useDispatch();
 
-  // useEffect(async () => {
-  //   await axios
-  //     .get("http://localhost:3001/diets")
-  //     .then((res) => {
-  //       dispatch(loadDiets(res.data));
-  //       setSelectedDiets([...res.data]);
-  //     })
-  //     .catch((err) => {
-  //       window.alert(`Error al cargar las dietas: ${err.message}`);
-  //     });
-  // }, []);
-
   async function handleSearch() {
     await axios
       .get(`http://localhost:3001/recipes?name=${searchTerm}`)

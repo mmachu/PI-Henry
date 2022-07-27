@@ -21,6 +21,7 @@ router.get("/diets", async (req, res) => {
 
 router.get("/recipes", async (req, res) => {
   const name = req.query.name;
+  if (!name) throw new Error("No se ha especificado un nombre de receta");
   try {
     const recipesResult = await Recipe.findAll({
       where: {
@@ -46,7 +47,6 @@ router.get("/recipes", async (req, res) => {
         return recipe;
       }
     });
-
     https.get(
       `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=${process.env.API_KEY}&number=20&addRecipeInformation=true`,
       (resp) => {
@@ -138,23 +138,11 @@ router.get("/recipes/:id", async (req, res) => {
   }
 });
 
-router.get("/diets", async (req, res) => {
-  try {
-    const diets = await Diet.findAll({
-      attributes: ["name"],
-    });
-    res.status(200).send(diets);
-  } catch (err) {
-    res.status(400).send(err.message);
-  }
-});
-
 router.post("/recipes", async (req, res) => {
   const { title, description, image, healthScore, steps, diets } = req.body;
   try {
     const dietList = await Diet.findAll();
     const dietLower = dietList.map((diet) => diet.name.toLowerCase());
-    // const dietIDs = dietList.map((diet) => diet.id);
     let dietsIdsToAdd = [];
     for (let i = 0; i < diets.length; i++) {
       if (!dietLower.includes(diets[i].name)) {
