@@ -20,14 +20,15 @@ const RecipeDetail = (props) => {
     return recipe?.ingredients?.map((ingredient, index) => {
       return (
         <li key={ingredient + index} className={styles.listItem}>
-          <GiCook style={{ color: "#000", marginRight: "10px" }} /> {ingredient}
+          <GiCook style={{ color: "#fff", marginRight: "10px" }} />{" "}
+          {ingredient.charAt(0).toUpperCase() + ingredient.slice(1)}
         </li>
       );
     });
   };
 
   const mapSteps = () => {
-    return recipe?.steps?.map((step, index) => {
+    return recipe?.analyzedInstructions?.map((step, index) => {
       return (
         <li key={step.step} className={styles.steps}>
           {step.step}
@@ -37,47 +38,25 @@ const RecipeDetail = (props) => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>{recipe.title}</div>
-      <div className={styles.description}>{recipe.description}</div>
-      <div className={styles.ingredientsContainer}>
-        <div className={styles.contentTitle}>Ingredientes</div>
-        <ul className={styles.ingredientsList}>
-          {mapIngredients()}
-          {/* <li className={styles.listItem}>
-            <GiCook style={{ color: "#000", marginRight: "10px" }} /> 1/2 pound
-            smoked salmon
-          </li>
-          <li className={styles.listItem}>
-            <GiCook style={{ color: "#000", marginRight: "10px" }} /> 1/2 pound
-            smoked haddock
-          </li>
-          <li className={styles.listItem}>
-            <GiCook style={{ color: "#000", marginRight: "10px" }} /> 1/2 cup
-            chopped onion
-          </li>
-          <li className={styles.listItem}>
-            <GiCook style={{ color: "#000", marginRight: "10px" }} /> 1/2 cup
-            chopped celery
-          </li>
-          <li className={styles.listItem}>
-            <GiCook style={{ color: "#000", marginRight: "10px" }} /> 1/2 cup
-            chopped parsley
-          </li> */}
-        </ul>
-        <div className={styles.contentTitle}>Paso a paso</div>
-        <ul className={styles.ingredientsList}>
-          {mapSteps()}
-          {/* <li className={styles.steps}>1/2 pound smoked salmon</li>
-          <li className={styles.steps}>1/2 pound smoked haddock</li>
-          <li className={styles.steps}>1/2 cup chopped onion</li>
-          <li className={styles.steps}>1/2 cup chopped celery</li>
-          <li className={styles.steps}>1/2 cup chopped parsley</li> */}
-        </ul>
+    <div className={styles.background}>
+      <div className={styles.container}>
+        <div className={styles.title}>{recipe.title}</div>
+        <div className={styles.description}>{recipe.description}</div>
+        <div className={styles.mainSection}>
+          <div className={styles.leftColumn}>
+            <div className={styles.contentTitle}>Ingredientes</div>
+            <ul className={styles.ingredientsList}>{mapIngredients()}</ul>
+            <div className={styles.contentTitle}>Paso a paso</div>
+            <ul className={styles.ingredientsList}>{mapSteps()}</ul>
+          </div>
+          <img className={styles.img} src={recipe.image} />
+        </div>
+        <div className={styles.buttonContainer}>
+          <NavLink to="/index">
+            <button>Buscar otras recetas</button>
+          </NavLink>
+        </div>
       </div>
-      <NavLink to="/">
-        <button>Volvemo al main</button>
-      </NavLink>
     </div>
   );
 };

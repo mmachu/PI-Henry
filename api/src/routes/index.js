@@ -8,6 +8,7 @@ const { send } = require("process");
 const helper = require("../helper/helpers.js");
 const router = Router();
 
+const API_KEY = process.env.API_KEY;
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
@@ -30,83 +31,89 @@ router.get("/recipes", async (req, res) => {
           [Op.like]: `%${name}%`,
         },
       },
-      attributes: ["id", "title", "image", "healthScore"],
+      attributes: ["id", "title", "image", "healthScore", "from"],
       include: [
         { model: Diet, attributes: ["name"], through: { attributes: [] } },
       ],
     });
-    const recipes = recipesResult.map((recipe) => {
-      if (recipe.diets.length > 0) {
-        return {
-          id: recipe.id,
-          title: recipe.title,
-          image: recipe.image,
-          healthScore: recipe.healthScore,
-          diets: recipe.diets.map((diet) => diet.name.toLowerCase()),
-        };
-      } else {
-        return recipe;
-      }
-    });
 
-    let dietSet = new Set();
-    recipes.forEach((recipe) => {
-      if (recipe.diets.length > 0) {
-        recipe.diets.forEach((diet) => {
-          // console.log(diet);
-          // let lowerDiet =
-          //   diet.name?.toLowerCase() || diet.toLowerCase();
-          dietSet.add(diet);
-        });
-      }
-    });
-    let dietsArr = Array.from(dietSet);
-    recipes.push(dietsArr);
-    res.status(200).send(recipes);
-
-    // https.get(
-    //   `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=${process.env.API_KEY}&number=20&addRecipeInformation=true`,
-    //   (resp) => {
-    //     let data = "";
-    //     resp
-    //       .on("data", (chunk) => {
-    //         data += chunk;
-    //       })
-    //       .on("end", () => {
-    //         const jsonData = JSON.parse(data);
-    //         const spoonacularResults = jsonData.results.map((recipe) => {
-    //           return {
-    //             id: recipe.id,
-    //             title: recipe.title,
-    //             image: recipe.image,
-    //             description: recipe.description,
-    //             diets: recipe.diets,
-    //             healthScore: recipe.healthScore,
-    //             steps: recipe.steps,
-    //           };
-    //         });
-
-    //         if (recipes.length === 0 && spoonacularResults.length === 0) {
-    //           res.status(404).send("No se encontraron recetas");
-    //         }
-    //         let results = [...spoonacularResults, ...recipes];
-    //         let dietSet = new Set();
-    //         results.forEach((recipe) => {
-    //           if (recipe.diets.length > 0) {
-    //             recipe.diets.forEach((diet) => {
-    //               dietSet.add(diet);
-    //             });
-    //           }
-    //         });
-    //         let dietsArr = Array.from(dietSet);
-    //         results.sort((a, b) => {
-    //           return a.title < b.title ? -1 : 1;
-    //         });
-    //         results.push(dietsArr);
-    //         res.status(200).send(results);
-    //       });
+    const recipes = helper.recipeImportantFields(recipesResult);
+    // res.status(200).send(recipes);
+    // const recipes = recipesResult.map((recipe) => {
+    //   if (recipe.diets.length > 0) {
+    //     return {
+    //       id: recipe.id,
+    //       title: recipe.title,
+    //       image: recipe.image,
+    //       healthScore: recipe.healthScore,
+    //       diets: recipe.diets.map((diet) => diet.name.toLowerCase()),
+    //     };
+    //   } else {
+    //     return recipe;
     //   }
-    // );
+    // });
+
+    // let dietSet = new Set();
+    // recipes.forEach((recipe) => {
+    //   if (recipe.diets.length > 0) {
+    //     recipe.diets.forEach((diet) => {
+    //       // console.log(diet);
+    //       // let lowerDiet =
+    //       //   diet.name?.toLowerCase() || diet.toLowerCase();
+    //       dietSet.add(diet);
+    //     });
+    //   }
+    // });
+    // let dietsArr = Array.from(dietSet);
+
+    // recipes.push(dietsArr);
+    // res.status(200).send(recipes);
+
+    https.get(
+      `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=${API_KEY}&number=20&addRecipeInformation=true`,
+      (resp) => {
+        let data = "";
+        resp
+          .on("data", (chunk) => {
+            data += chunk;
+          })
+          .on("end", () => {
+            const jsonData = JSON.parse(data);
+
+            const spoonacularResults = helper.recipeImportantFields(
+              jsonData.results
+            );
+            jsonData.results.map((recipe) => {
+              return {
+                id: recipe.id,
+                title: recipe.title,
+                image: recipe.image,
+                diets: recipe.diets,
+                healthScore: recipe.healthScore,
+              };
+            });
+
+            if (recipes.length === 0 && spoonacularResults.length === 0) {
+              res.status(404).send("No se encontraron recetas");
+            }
+            let results = [...spoonacularResults, ...recipes];
+            results.forEach((recipe) => {
+              if (recipe.diets.length > 0) {
+                recipe.diets.forEach((diet) => {
+                  dietSet.add(diet);
+                });
+              }
+            });
+            let dietsArr = Array.from(helper.recipeExtractDiets(results));
+            results.sort((a, b) => {
+              return a.title < b.title ? -1 : 1;
+            });
+            results.push(dietsArr);
+
+            res.status(200).send(results);
+          });
+      }
+    );
   } catch (err) {
     res.status(404).send(err.message);
   }
@@ -123,15 +130,16 @@ router.get("/recipes/:id", async (req, res) => {
           { model: Diet, attributes: ["name"], through: { attributes: [] } },
         ],
       });
-      if (Object.keys(recipe).length === 0) {
+      if (recipe === null) {
         res.status(404).send("No se encontró la receta");
       } else {
-        recipe = helper.cleanDescription(recipe);
+        recipe = JSON.parse(JSON.stringify(recipe));
+        recipe = helper.byIdCleanup(recipe);
         res.status(200).send(recipe);
       }
     } else {
       https.get(
-        `https://api.spoonacular.com/recipes/${id}?apiKey=${process.env.API_KEY}&addRecipeInformation=true`,
+        `https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`,
         (resp) => {
           if (resp.statusCode === 404) {
             res.status(404).send("No se encontró la receta");
@@ -142,8 +150,20 @@ router.get("/recipes/:id", async (req, res) => {
                 data += chunk;
               })
               .on("end", () => {
-                recipe = JSON.parse(data);
-                res.status(201).send(recipe);
+                let allData = JSON.parse(data);
+                let recipe = {
+                  id: allData.id,
+                  title: allData.title,
+                  image: allData.image,
+                  summary: allData.summary,
+                  diets: allData.diets,
+                  healthScore: allData.healthScore,
+                  analyzedInstructions: allData.analyzedInstructions,
+                };
+                recipe = helper.byIdCleanup(recipe);
+
+                //recipe = helper.byIdCleanup(recipe.results);
+                res.status(200).send(recipe);
               });
           }
         }
@@ -155,8 +175,15 @@ router.get("/recipes/:id", async (req, res) => {
 });
 
 router.post("/recipes", async (req, res) => {
-  const { title, description, image, healthScore, steps, diets, ingredients } =
-    req.body;
+  const {
+    title,
+    summary,
+    image,
+    healthScore,
+    analyzedInstructions,
+    diets,
+    ingredients,
+  } = req.body;
   try {
     const dietList = await Diet.findAll();
     const dietLower = dietList.map((diet) => diet.name.toLowerCase());
@@ -173,10 +200,10 @@ router.post("/recipes", async (req, res) => {
       id: (+new Date()).toString(36),
       title: title,
       image: image,
-      description: description,
+      summary: summary,
       healthScore: healthScore,
       ingredients: ingredients,
-      steps: steps,
+      analyzedInstructions: analyzedInstructions,
     });
     newRecipe.addDiet(dietsIdsToAdd);
     res.status(201).send(newRecipe);

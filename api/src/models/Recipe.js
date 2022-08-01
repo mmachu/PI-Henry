@@ -18,14 +18,14 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING(2048),
         allowNull: false,
       },
-      description: {
+      summary: {
         type: DataTypes.STRING(3000),
         allowNull: false,
       },
       healthScore: {
         type: DataTypes.INTEGER,
       },
-      steps: {
+      analyzedInstructions: {
         type: DataTypes.ARRAY(DataTypes.JSON),
       },
       ingredients: {

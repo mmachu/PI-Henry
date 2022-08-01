@@ -1,8 +1,17 @@
+.background {
+  min-height: 100vh;
+  background-image: url("recipeid.jpg");
+  background-size: cover;
+  display: flex;
+  isolation: isolate;
+}
+
 .container {
   max-width: 1300px;
   width: 100%;
   height: 100%;
   margin: 0px auto 0px auto;
+  background-color: rgba(73, 112, 29, 0.9);
 }
 
 .title {
@@ -12,17 +21,50 @@
   justify-content: left;
   align-items: center;
   text-align: center;
-  background-color: lightcoral;
+  background-color: rgb(151, 38, 38);
+  mix-blend-mode: hard-light;
   font-family: "Roboto Mono", monospace;
   font-size: 30px;
   text-decoration: underline 2px;
 }
 
-.description {
-  padding: 3px;
+.title::before {
+  content: "";
+  width: 1%;
 }
 
-.ingredientsContainer {
+.description {
+  /* display: flex;
+  align-items: center; */
+  line-height: 1.5em;
+  padding: 15px;
+  color: rgba(255, 255, 255, 1);
+  height: 15vh;
+}
+
+.description::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 15px;
+  background-color: var(--yellow);
+}
+
+.description::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 15px;
+  background-color: var(--yellow);
+}
+.mainSection {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  min-height: 62vh;
+}
+
+.leftColumn {
   display: flex;
   flex-direction: column;
 }
@@ -45,10 +87,6 @@
   margin-bottom: 2px;
 }
 
-.ingredientIcon {
-  color: black;
-}
-
 .steps {
   font-size: 18px;
   margin-top: 2px;
@@ -61,5 +99,18 @@
   font-size: 20px;
   font-weight: 400;
   content: counter(step-counter) ") ";
-  color: var(--green);
+  color: white;
+}
+
+.img {
+  width: 40%;
+  height: 50%;
+}
+
+.buttonContainer {
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
