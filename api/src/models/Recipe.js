@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       description: {
-        type: DataTypes.STRING(1000),
+        type: DataTypes.STRING(3000),
         allowNull: false,
       },
       healthScore: {
@@ -27,6 +27,9 @@ module.exports = (sequelize) => {
       },
       steps: {
         type: DataTypes.ARRAY(DataTypes.JSON),
+      },
+      ingredients: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
       },
       from: {
         type: DataTypes.VIRTUAL,

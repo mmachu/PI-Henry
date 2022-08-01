@@ -23,4 +23,5 @@ CREATE TABLE recipe_dietTypes(
 );
 
 INSERT INTO diets(name)
-VALUES ('Gluten Free'), ('Ketogenic'), ('Vegetarian'), ('Lacto Vegetarian'), ('Ovo Vegetarian'),  ('Lacto Ovo Vegetarian'),('Vegan'), ('Pescetarian'), ('Paleo'), ('Primal'), ('Low FODMAP'), ('Whole30'), ('Dairy Free');
+VALUES ('Gluten Free'), ('Ketogenic'), ('Vegetarian'), ('Lacto Vegetarian'), ('Ovo Vegetarian'),  
+('Lacto Ovo Vegetarian'),('Vegan'), ('Pescetarian'), ('Paleo'), ('Primal'), ('Low FODMAP'), ('Whole30'), ('Dairy Free');
