@@ -11,6 +11,7 @@ import {
   TbSortDescendingNumbers,
 } from "react-icons/tb";
 import styles from "./recipesearch.module.css";
+import Navigation from "../Navigation/Navigation.js";
 import FilterMenu from "../FilterMenu/FilterMenu.jsx";
 import SearchResults from "../SearchResults/SearchResults.jsx";
 const axios = require("axios").default;
@@ -20,8 +21,14 @@ const RecipeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDiets, setSelectedDiets] = useState([]);
   const recipes = useSelector((state) => state.loadedRecipes);
-
+  const allDiets = useSelector((state) => state.diets);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (recipes?.length > 0) {
+      setSelectedDiets([...allDiets]);
+    }
+  }, []);
 
   async function handleSearch() {
     await axios
@@ -109,24 +116,7 @@ const RecipeSearch = () => {
     <div className={styles.background}>
       <div className={styles.container}>
         <div className={styles.topBars}>
-          <nav className={styles.navStyle}>
-            <div className={styles.navButtonsContainer}>
-              <div className={styles.navButtons}>
-                <p>Favoritos</p>
-              </div>
-              <div className={styles.navButtons}>
-                <p>Crear Receta</p>
-              </div>
-              <NavLink to="/">
-                <div className={styles.navButtons}>
-                  <p>Ingresar Registrarse</p>
-                </div>
-              </NavLink>
-            </div>
-            <div className={styles.navName}>
-              <p className={styles.title}>Food PI</p>
-            </div>
-          </nav>
+          <Navigation />
           <div className={styles.searchBar}>
             <div className={styles.dietFilterButtonContainer}>
               {recipes?.length > 0 && (

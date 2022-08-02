@@ -1,0 +1,49 @@
+.navStyle {
+  width: 100%;
+  height: 80px;
+  background-color: rgba(73, 112, 29, 0.5);
+  display: flex;
+  flex-direction: row-reverse;
+  font-family: "Poppins", sans-serif;
+}
+
+.navButtonsContainer {
+  position: relative;
+  display: flex;
+}
+
+.navButtons {
+  width: 150px;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 200;
+  color: var(--yellow);
+  transition: background-color 0.2s ease-in;
+}
+
+.navButtons:hover {
+  cursor: pointer;
+  background-color: rgba(73, 112, 29, 0.5);
+  font-weight: 700;
+}
+
+.navName {
+  width: calc(100% - 300px);
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-weight: 700;
+  word-wrap: break-word;
+  margin-left: 50px;
+}
+
+.title {
+  font-size: clamp(1.5rem, 5vw + 0.5rem, 2rem);
+  line-height: 1.5;
+  margin: 0;
+  color: var(--yellow);
+}

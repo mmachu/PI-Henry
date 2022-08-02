@@ -2,7 +2,10 @@ const cleanSteps = (recipe) => {
   let newSteps = [];
   let ingredients = [];
   let broke = false;
-  let steps = recipe.analyzedInstructions[0].steps;
+  let steps = recipe.analyzedInstructions[0].steps
+    ? recipe.analyzedInstructions[0].steps
+    : recipe.analyzedInstructions;
+  console.log(steps);
   for (var i = 0; i < steps.length; i++) {
     if (steps[i].ingredients === undefined) {
       broke = true;
@@ -46,7 +49,7 @@ const cleanDescription = (recipe) => {
       newDescription.push(recipe.summary[i]);
     }
   }
-  recipe.description = newDescription.join("");
+  recipe.summary = newDescription.join("");
   return recipe;
 };
 

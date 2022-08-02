@@ -38,36 +38,6 @@ router.get("/recipes", async (req, res) => {
     });
 
     const recipes = helper.recipeImportantFields(recipesResult);
-    // res.status(200).send(recipes);
-    // const recipes = recipesResult.map((recipe) => {
-    //   if (recipe.diets.length > 0) {
-    //     return {
-    //       id: recipe.id,
-    //       title: recipe.title,
-    //       image: recipe.image,
-    //       healthScore: recipe.healthScore,
-    //       diets: recipe.diets.map((diet) => diet.name.toLowerCase()),
-    //     };
-    //   } else {
-    //     return recipe;
-    //   }
-    // });
-
-    // let dietSet = new Set();
-    // recipes.forEach((recipe) => {
-    //   if (recipe.diets.length > 0) {
-    //     recipe.diets.forEach((diet) => {
-    //       // console.log(diet);
-    //       // let lowerDiet =
-    //       //   diet.name?.toLowerCase() || diet.toLowerCase();
-    //       dietSet.add(diet);
-    //     });
-    //   }
-    // });
-    // let dietsArr = Array.from(dietSet);
-
-    // recipes.push(dietsArr);
-    // res.status(200).send(recipes);
 
     https.get(
       `https://api.spoonacular.com/recipes/complexSearch?query=${name}&apiKey=${API_KEY}&number=20&addRecipeInformation=true`,
@@ -83,33 +53,17 @@ router.get("/recipes", async (req, res) => {
             const spoonacularResults = helper.recipeImportantFields(
               jsonData.results
             );
-            jsonData.results.map((recipe) => {
-              return {
-                id: recipe.id,
-                title: recipe.title,
-                image: recipe.image,
-                diets: recipe.diets,
-                healthScore: recipe.healthScore,
-              };
-            });
 
             if (recipes.length === 0 && spoonacularResults.length === 0) {
               res.status(404).send("No se encontraron recetas");
             }
             let results = [...spoonacularResults, ...recipes];
-            results.forEach((recipe) => {
-              if (recipe.diets.length > 0) {
-                recipe.diets.forEach((diet) => {
-                  dietSet.add(diet);
-                });
-              }
-            });
+
             let dietsArr = Array.from(helper.recipeExtractDiets(results));
             results.sort((a, b) => {
               return a.title < b.title ? -1 : 1;
             });
             results.push(dietsArr);
-
             res.status(200).send(results);
           });
       }
@@ -130,10 +84,10 @@ router.get("/recipes/:id", async (req, res) => {
           { model: Diet, attributes: ["name"], through: { attributes: [] } },
         ],
       });
+
       if (recipe === null) {
         res.status(404).send("No se encontró la receta");
       } else {
-        recipe = JSON.parse(JSON.stringify(recipe));
         recipe = helper.byIdCleanup(recipe);
         res.status(200).send(recipe);
       }
@@ -160,9 +114,7 @@ router.get("/recipes/:id", async (req, res) => {
                   healthScore: allData.healthScore,
                   analyzedInstructions: allData.analyzedInstructions,
                 };
-                recipe = helper.byIdCleanup(recipe);
-
-                //recipe = helper.byIdCleanup(recipe.results);
+                recipe = helper.byIdCleanup(recipe.results);
                 res.status(200).send(recipe);
               });
           }

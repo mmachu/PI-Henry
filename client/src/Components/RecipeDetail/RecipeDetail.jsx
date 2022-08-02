@@ -37,28 +37,34 @@ const RecipeDetail = (props) => {
     });
   };
 
-  return (
-    <div className={styles.background}>
-      <div className={styles.container}>
-        <div className={styles.title}>{recipe.title}</div>
-        <div className={styles.description}>{recipe.description}</div>
-        <div className={styles.mainSection}>
-          <div className={styles.leftColumn}>
-            <div className={styles.contentTitle}>Ingredientes</div>
-            <ul className={styles.ingredientsList}>{mapIngredients()}</ul>
-            <div className={styles.contentTitle}>Paso a paso</div>
-            <ul className={styles.ingredientsList}>{mapSteps()}</ul>
+  const showRecipe = () => {
+    if (!recipe.title) {
+      return <h1>Loading...</h1>;
+    } else {
+      return (
+        <div className={styles.container}>
+          <div className={styles.title}>{recipe.title}</div>
+          <div className={styles.description}>{recipe.summary}</div>
+          <div className={styles.mainSection}>
+            <div className={styles.leftColumn}>
+              <div className={styles.contentTitle}>Ingredientes</div>
+              <ul className={styles.ingredientsList}>{mapIngredients()}</ul>
+              <div className={styles.contentTitle}>Paso a paso</div>
+              <ul className={styles.ingredientsList}>{mapSteps()}</ul>
+            </div>
+            <img className={styles.img} src={recipe.image} />
           </div>
-          <img className={styles.img} src={recipe.image} />
+          <div className={styles.buttonContainer}>
+            <NavLink to="/index">
+              <button>Buscar otras recetas</button>
+            </NavLink>
+          </div>
         </div>
-        <div className={styles.buttonContainer}>
-          <NavLink to="/index">
-            <button>Buscar otras recetas</button>
-          </NavLink>
-        </div>
-      </div>
-    </div>
-  );
+      );
+    }
+  };
+
+  return <div className={styles.background}>{showRecipe()}</div>;
 };
 
 export default RecipeDetail;

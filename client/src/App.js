@@ -4,6 +4,7 @@ import "./App.css";
 import Main from "./Components/Main/Main.jsx";
 import RecipeSearch from "./Components/RecipeSearch/RecipeSearch.jsx";
 import RecipeDetail from "./Components/RecipeDetail/RecipeDetail.jsx";
+import CreateRecipe from "./Components/CreateRecipe/CreateRecipe.js";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Route exact path="/" component={Main} />
       <Route path="/index" component={RecipeSearch} />
       <Route path="/recipe/:id" component={RecipeDetail} />
+      <Route path="/createRecipe" component={CreateRecipe} />
     </React.Fragment>
   );
 }
