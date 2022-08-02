@@ -1,0 +1,98 @@
+textarea {
+  resize: none;
+  height: 180px;
+  width: 357px;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  height: 100%;
+  margin: 0px auto 0px auto;
+}
+
+.title {
+  background-color: var(--yellow);
+}
+
+.formContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.formStyle {
+  min-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.staticFieldsContainer {
+  max-width: 600px;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.staticInputsNames {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: end; */
+  align-items: end;
+  margin-right: 20px;
+}
+
+.staticInputsInput {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: end; */
+  align-items: baseline;
+  margin-right: 20px;
+}
+
+.staticInputs {
+  /* border-top: none; */
+  border-radius: 0px;
+  border-color: lightgray;
+  margin-top: 5px;
+}
+
+.staticInputs:focus {
+  outline: none;
+}
+
+.stepsAndIngredients {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background-color: lightcoral;
+}
+
+.stepsContainer {
+  width: 50%;
+}
+
+.ingredientsContainer {
+  width: 50%;
+}
+
+.step {
+}
+
+.ingredient {
+}
