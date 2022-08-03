@@ -27,18 +27,18 @@ const CreateRecipe = () => {
 
   console.log(diets);
 
-  // useEffect(async () => {
-  //   await axios
-  //     .get("http://localhost:3001/diets")
-  //     .then((response) => {
-  //       let dbDiets = [];
-  //       response.data.map((diet) => dbDiets.push(diet.name));
-  //       dispatch(loadDiets(dbDiets));
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  useEffect(async () => {
+    await axios
+      .get("http://localhost:3001/diets")
+      .then((response) => {
+        let dbDiets = [];
+        response.data.map((diet) => dbDiets.push(diet.name));
+        dispatch(loadDiets(dbDiets));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleStepChange = (e, stepNumber) => {
     const newSteps = [...steps];
@@ -119,6 +119,12 @@ const CreateRecipe = () => {
     });
   };
 
+  const handleChangeDiet = (e, i) => {
+    let oldDiets = [...diets];
+    oldDiets[i] = e.target.value;
+    setDiets([...oldDiets]);
+  };
+
   const showIngredients = () => {
     return ingredients.map((ingredient) => {
       return (
@@ -143,11 +149,23 @@ const CreateRecipe = () => {
     if (diets.length > 0) {
       return diets.map((diet, i) => {
         return (
-          <select key={i} name="dietas">
-            {allDiets.map((diet) => {
-              return <option value={diet}>{diet}</option>;
-            })}
-          </select>
+          <div className={styles.ingredient} key={i}>
+            <label>Dieta {i + 1}</label>
+            <select
+              id={i}
+              onChange={(e) => handleChangeDiet(e, i)}
+              key={i}
+              name="dietas"
+            >
+              {allDiets.map((diet, n) => {
+                return (
+                  <option key={diet} id={`${diet}${n}`} value={diet}>
+                    {diet}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         );
       });
     }
@@ -249,9 +267,8 @@ const CreateRecipe = () => {
                     Eliminar ultima dieta
                   </button>
                 </div>
-                {/* <div className={styles.ingredient}> */}
+
                 {showDiets()}
-                {/* </div> */}
               </div>
             </div>
           </div>
