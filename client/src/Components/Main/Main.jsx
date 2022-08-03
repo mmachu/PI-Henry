@@ -56,9 +56,9 @@ const Main = () => {
       <div className={styles.styleSetter}>
         <div className={styles.textContainer}>
           {/* <NavLink to="/index" style={{ textDecoration: "none", margin: "0px" }}> */}
-          <h2>Food PI</h2>
+          <h2 className={styles.h2}>Food PI</h2>
           <p className={styles.activites1}>En esta pagina podras:</p>
-          <ul>
+          <ul className={styles.ul}>
             <li className={styles.activities2}>
               <MdSearch /> - Buscar recetas
             </li>

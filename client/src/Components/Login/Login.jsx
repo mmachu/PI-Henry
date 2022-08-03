@@ -13,7 +13,9 @@ const Login = ({ intervalID }) => {
       <input type="text" className={styles.inputMain} />
       <label>Contraseña</label>
       <input type="password" className={styles.inputMain} />
-      <button tpye="submit">Ingresar</button>
+      <button className={styles.button} type="submit">
+        Ingresar
+      </button>
       <h4>
         O ingresar sin usuario haciendo click{" "}
         {

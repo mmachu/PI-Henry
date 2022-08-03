@@ -10,7 +10,9 @@ const Register = () => {
       <input type="text" className={styles.inputMain} />
       <label>Contraseña</label>
       <input type="password" className={styles.inputMain} />
-      <button tpye="submit">Registrarme</button>
+      <button className={styles.button} type="submit">
+        Registrarme
+      </button>
     </>
   );
 };

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { loadDiets } from "../../Actions/actions.js";
 import styles from "./createrecipe.module.css";
 import Navigation from "../Navigation/Navigation.js";
 import ErrorModal from "../ErrorModal/ErrorModal.js";
+const axios = require("axios").default;
 
 const CreateRecipe = () => {
   const [steps, setSteps] = useState([
@@ -16,8 +19,26 @@ const CreateRecipe = () => {
     { number: 0, ingredient: "" },
     { number: 1, ingredient: "" },
   ]);
+  const [diets, setDiets] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const allDiets = useSelector((state) => state.diets);
+
+  console.log(diets);
+
+  // useEffect(async () => {
+  //   await axios
+  //     .get("http://localhost:3001/diets")
+  //     .then((response) => {
+  //       let dbDiets = [];
+  //       response.data.map((diet) => dbDiets.push(diet.name));
+  //       dispatch(loadDiets(dbDiets));
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   const handleStepChange = (e, stepNumber) => {
     const newSteps = [...steps];
@@ -46,6 +67,12 @@ const CreateRecipe = () => {
     setIngredients([...newIngredients]);
   };
 
+  const handleAddDiet = () => {
+    const newDiets = [...diets];
+    newDiets.push("");
+    setDiets([...newDiets]);
+  };
+
   const handleRemoveStep = () => {
     if (steps.length <= 5) {
       setIsOpen(true);
@@ -57,7 +84,7 @@ const CreateRecipe = () => {
     }
   };
 
-  const handleDeleteIngredient = () => {
+  const handleRemoveIngredient = () => {
     if (ingredients.length <= 2) {
       setIsOpen(true);
       setError("Se necesitan al menos 2 ingredientes en la receta");
@@ -66,6 +93,13 @@ const CreateRecipe = () => {
       newIngredients.pop();
       setIngredients([...newIngredients]);
     }
+  };
+
+  const handleRemoveDiet = () => {
+    if (diets.length === 0) return;
+    const newDiets = [...diets];
+    newDiets.pop();
+    setDiets([...newDiets]);
   };
 
   const showSteps = () => {
@@ -103,6 +137,20 @@ const CreateRecipe = () => {
         </div>
       );
     });
+  };
+
+  const showDiets = () => {
+    if (diets.length > 0) {
+      return diets.map((diet, i) => {
+        return (
+          <select key={i} name="dietas">
+            {allDiets.map((diet) => {
+              return <option value={diet}>{diet}</option>;
+            })}
+          </select>
+        );
+      });
+    }
   };
 
   return (
@@ -144,10 +192,18 @@ const CreateRecipe = () => {
               <div className={styles.stepsContainer}>
                 <h3>Agregar pasos</h3>
                 <div className={styles.buttonContainer}>
-                  <button type="button" onClick={handleAddStep}>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleAddStep}
+                  >
                     Agregar un nuevo paso
                   </button>{" "}
-                  <button type="button" onClick={handleRemoveStep}>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleRemoveStep}
+                  >
                     Eliminar el ultimo paso
                   </button>
                 </div>
@@ -156,15 +212,45 @@ const CreateRecipe = () => {
               <div className={styles.ingredientsContainer}>
                 <h3>Ingredientes</h3>
                 <div className={styles.buttonContainer}>
-                  <button type="button" onClick={handleAddIngredient}>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleAddIngredient}
+                  >
                     Agregar un nuevo ingrediente
                   </button>
-                  <button type="button" onClick={handleDeleteIngredient}>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleRemoveIngredient}
+                  >
                     Eliminar el ultimo ingrediente
                   </button>
                 </div>
                 {/* <div className={styles.ingredient}> */}
                 {showIngredients()}
+                {/* </div> */}
+              </div>
+              <div className={styles.ingredientsContainer}>
+                <h3>Dietas</h3>
+                <div className={styles.buttonContainer}>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleAddDiet}
+                  >
+                    Agregar dieta
+                  </button>
+                  <button
+                    className={styles.button}
+                    type="button"
+                    onClick={handleRemoveDiet}
+                  >
+                    Eliminar ultima dieta
+                  </button>
+                </div>
+                {/* <div className={styles.ingredient}> */}
+                {showDiets()}
                 {/* </div> */}
               </div>
             </div>
