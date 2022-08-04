@@ -1,0 +1,39 @@
+.staticFieldsContainer {
+  max-width: 600px;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.staticInputsNames {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: end; */
+  align-items: end;
+  margin-right: 20px;
+}
+
+.staticInputsInput {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: end; */
+  align-items: baseline;
+  margin-right: 20px;
+}
+
+.p {
+  margin-bottom: 24px;
+}
+
+.staticInputs {
+  /* border-top: none; */
+  border-radius: 0px;
+  border-color: lightgray;
+  margin-top: 5px;
+}
+
+.staticInputs:focus {
+  outline: none;
+}

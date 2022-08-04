@@ -6,9 +6,9 @@ const Register = () => {
   return (
     <>
       <h3>Ingrese sus datos</h3>
-      <label>Email</label>
+      <label className={styles.label}>Email</label>
       <input type="text" className={styles.inputMain} />
-      <label>Contraseña</label>
+      <label className={styles.label}>Contraseña</label>
       <input type="password" className={styles.inputMain} />
       <button className={styles.button} type="submit">
         Registrarme

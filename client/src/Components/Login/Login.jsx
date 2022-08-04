@@ -9,9 +9,9 @@ const Login = ({ intervalID }) => {
   return (
     <>
       <h3>Si ya se encuentra registado, ingrese sus datos:</h3>
-      <label>Email</label>
+      <label className={styles.label}>Email</label>
       <input type="text" className={styles.inputMain} />
-      <label>Contraseña</label>
+      <label className={styles.label}>Contraseña</label>
       <input type="password" className={styles.inputMain} />
       <button className={styles.button} type="submit">
         Ingresar

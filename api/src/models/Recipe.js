@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
         type: DataTypes.ARRAY(DataTypes.JSON),
       },
       ingredients: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.ARRAY(DataTypes.STRING(20)),
       },
       from: {
         type: DataTypes.VIRTUAL,

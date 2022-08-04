@@ -5,9 +5,17 @@ import { loadDiets } from "../../Actions/actions.js";
 import styles from "./createrecipe.module.css";
 import Navigation from "../Navigation/Navigation.js";
 import ErrorModal from "../ErrorModal/ErrorModal.js";
+import UniqueValueInputs from "../UniqueValueInputs/UniqueValueInputs.js";
+import AddSteps from "../AddSteps/AddSteps.js";
+import AddIngredients from "../AddIngredients/AddIngredients.js";
+import AddDiets from "../AddDiets/AddDiets.js";
+
 const axios = require("axios").default;
 
 const CreateRecipe = () => {
+  const [title, setTitle] = useState("");
+  const [healthScore, setHealthScore] = useState(0);
+  const [description, setDescription] = useState("");
   const [steps, setSteps] = useState([
     { number: 0, step: "" },
     { number: 1, step: "" },
@@ -22,10 +30,9 @@ const CreateRecipe = () => {
   const [diets, setDiets] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
+
   const dispatch = useDispatch();
   const allDiets = useSelector((state) => state.diets);
-
-  console.log(diets);
 
   useEffect(async () => {
     await axios
@@ -40,19 +47,103 @@ const CreateRecipe = () => {
       });
   }, []);
 
-  const handleStepChange = (e, stepNumber) => {
-    const newSteps = [...steps];
-    newSteps[stepNumber] = { ...newSteps[stepNumber], step: e.target.value };
-    setSteps(newSteps);
+  const handleChangeTitle = (e) => {
+    if (e.target.value.length === 0) {
+      setTitle(e.target.value);
+      return;
+    }
+    if (e.target.value.length <= 50) {
+      let titleRegEx = /[^0-9!@#\?\$%\^\&*\)\(+=._-]+$/g;
+      let pass = titleRegEx.test(e.target.value);
+      if (pass) {
+        setTitle(e.target.value);
+      }
+    }
   };
 
-  const handleIngredientChange = (e, ingredientNumber) => {
-    const newIngredients = [...ingredients];
-    newIngredients[ingredientNumber] = {
-      ...newIngredients[ingredientNumber],
-      ingredient: e.target.value,
-    };
-    setIngredients(newIngredients);
+  const handleChangeHS = (e) => {
+    if (e.target.value.length === 0) {
+      setHealthScore(e.target.value);
+      return;
+    }
+    if (e.target.value.length <= 3) {
+      let hsRegEx = /^[0-9]+$/g;
+      let pass = hsRegEx.test(e.target.value);
+      if (pass) {
+        if (Number(e.target.value) <= 100) {
+          setHealthScore(Number(e.target.value));
+        }
+      }
+    }
+  };
+
+  const handleChangeDescription = (e) => {
+    if (e.target.value.length === 0) {
+      setDescription(e.target.value);
+      return;
+    }
+    if (e.target.value.length <= 3000) {
+      let descriptionRegEx = /^[a-zA-Z0-9,. ]+$/gm;
+      let pass = descriptionRegEx.test(e.target.value);
+      if (pass) {
+        setDescription(e.target.value);
+      }
+    }
+  };
+
+  const handleChangeStep = (e, stepNumber) => {
+    if (e.target.value.length === 0) {
+      let newSteps = [...steps];
+      newSteps[stepNumber] = {
+        ...newSteps[stepNumber],
+        step: e.target.value,
+      };
+      setSteps(newSteps);
+      return;
+    }
+    if (e.target.value.length <= 200) {
+      let stepRegEx = /^[a-zA-Z0-9,. ]+$/g;
+      let pass = stepRegEx.test(e.target.value);
+      if (pass) {
+        const newSteps = [...steps];
+        newSteps[stepNumber] = {
+          ...newSteps[stepNumber],
+          step: e.target.value,
+        };
+        setSteps(newSteps);
+      }
+    }
+  };
+
+  const handleChangeIngredient = (e, ingredientNumber) => {
+    console.log(ingredients);
+    if (e.target.value.length === 0) {
+      let newIngredients = [...ingredients];
+      newIngredients[ingredientNumber] = {
+        ...newIngredients[ingredientNumber],
+        ingredient: e.target.value,
+      };
+      setIngredients([...newIngredients]);
+      return;
+    }
+    if (e.target.value.length <= 20) {
+      let ingredientRegEx = /[^0-9!@#\?\$%\^\&*\)\(+=._-]+$/g;
+      let pass = ingredientRegEx.test(e.target.value);
+      if (pass) {
+        const newIngredients = [...ingredients];
+        newIngredients[ingredientNumber] = {
+          ...newIngredients[ingredientNumber],
+          ingredient: e.target.value,
+        };
+        setIngredients(newIngredients);
+      }
+    }
+  };
+
+  const handleChangeDiet = (e, i) => {
+    let oldDiets = [...diets];
+    oldDiets[i] = e.target.value;
+    setDiets([...oldDiets]);
   };
 
   const handleAddStep = () => {
@@ -112,33 +203,25 @@ const CreateRecipe = () => {
             type="text"
             name="step"
             value={step.step}
-            onChange={(e) => handleStepChange(e, step.number)}
+            onChange={(e) => handleChangeStep(e, step.number)}
           />
+          <label>{`${step.step.length}`}/200 caracteres</label>
         </div>
       );
     });
   };
 
-  const handleChangeDiet = (e, i) => {
-    let oldDiets = [...diets];
-    oldDiets[i] = e.target.value;
-    setDiets([...oldDiets]);
-  };
-
   const showIngredients = () => {
-    return ingredients.map((ingredient) => {
+    return ingredients.map((ing) => {
       return (
-        <div
-          className={styles.ingredient}
-          key={ingredient.number + ingredient.ingredient}
-        >
-          <label>Ingrediente {ingredient.number + 1}</label>
+        <div className={styles.ingredient} key={ing.number}>
+          <label>Ingrediente {ing.number + 1}</label>
           <input
-            id={`ingredient-${ingredient.number}`}
+            id={`ingredient-${ing.number}`}
             type="text"
-            name={`ingredient ${ingredient.number}`}
-            value={ingredient.ingredient}
-            onChange={(e) => handleIngredientChange(e, ingredient.number)}
+            name={`ingredient ${ing.number}`}
+            value={ing.ingredient}
+            onChange={(e) => handleChangeIngredient(e, ing.number)}
           />
         </div>
       );
@@ -146,6 +229,13 @@ const CreateRecipe = () => {
   };
 
   const showDiets = () => {
+    const formattedDiets = allDiets.map((diet) => {
+      let splitDiet = diet.split(" ");
+      let formattedDiet = splitDiet.map((word) => {
+        return word[0].toUpperCase() + word.slice(1);
+      });
+      return formattedDiet.join(" ");
+    });
     if (diets.length > 0) {
       return diets.map((diet, i) => {
         return (
@@ -157,7 +247,8 @@ const CreateRecipe = () => {
               key={i}
               name="dietas"
             >
-              {allDiets.map((diet, n) => {
+              <option value="">Seleccione una dieta</option>
+              {formattedDiets.map((diet, n) => {
                 return (
                   <option key={diet} id={`${diet}${n}`} value={diet}>
                     {diet}
@@ -181,95 +272,30 @@ const CreateRecipe = () => {
       <div className={styles.formContainer}>
         <form className={styles.formStyle}>
           <div className={styles.inputContainer}>
-            <div className={styles.staticFieldsContainer}>
-              <div className={styles.staticInputsNames}>
-                <p>Nombre de la receta</p>
-                <p>Health score</p>
-                <p>Descripcion</p>
-              </div>
-              <div className={styles.staticInputsInput}>
-                <input
-                  className={styles.staticInputs}
-                  type="text"
-                  name="name"
-                />
-                <input
-                  className={styles.staticInputs}
-                  type="text"
-                  name="healthScore"
-                />
-                <textarea
-                  className={styles.staticInputs}
-                  type="textarea"
-                  name="summary"
-                />
-                <label>0/3000 caracteres</label>
-              </div>
-            </div>
+            <UniqueValueInputs
+              title={title}
+              handleChangeTitle={handleChangeTitle}
+              healthScore={healthScore}
+              handleChangeHS={handleChangeHS}
+              description={description}
+              handleChangeDescription={handleChangeDescription}
+            />
             <div className={styles.stepsAndIngredients}>
-              <div className={styles.stepsContainer}>
-                <h3>Agregar pasos</h3>
-                <div className={styles.buttonContainer}>
-                  <button
-                    className={styles.button}
-                    type="button"
-                    onClick={handleAddStep}
-                  >
-                    Agregar un nuevo paso
-                  </button>{" "}
-                  <button
-                    className={styles.button}
-                    type="button"
-                    onClick={handleRemoveStep}
-                  >
-                    Eliminar el ultimo paso
-                  </button>
-                </div>
-                {showSteps()}
-              </div>
-              <div className={styles.ingredientsContainer}>
-                <h3>Ingredientes</h3>
-                <div className={styles.buttonContainer}>
-                  <button
-                    className={styles.button}
-                    type="button"
-                    onClick={handleAddIngredient}
-                  >
-                    Agregar un nuevo ingrediente
-                  </button>
-                  <button
-                    className={styles.button}
-                    type="button"
-                    onClick={handleRemoveIngredient}
-                  >
-                    Eliminar el ultimo ingrediente
-                  </button>
-                </div>
-                {/* <div className={styles.ingredient}> */}
-                {showIngredients()}
-                {/* </div> */}
-              </div>
-              <div className={styles.ingredientsContainer}>
-                <h3>Dietas</h3>
-                <div className={styles.buttonContainer}>
-                  <button
-                    className={styles.button}
-                    type="button"
-                    onClick={handleAddDiet}
-                  >
-                    Agregar dieta
-                  </button>
-                  <button
-                    className={styles.button}
-                    type="button"
-                    onClick={handleRemoveDiet}
-                  >
-                    Eliminar ultima dieta
-                  </button>
-                </div>
-
-                {showDiets()}
-              </div>
+              <AddSteps
+                handleAddStep={handleAddStep}
+                handleRemoveStep={handleRemoveStep}
+                showSteps={showSteps}
+              />
+              <AddIngredients
+                handleAddIngredient={handleAddIngredient}
+                handleRemoveIngredient={handleRemoveIngredient}
+                showIngredients={showIngredients}
+              />
+              <AddDiets
+                handleAddDiet={handleAddDiet}
+                handleRemoveDiet={handleRemoveDiet}
+                showDiets={showDiets}
+              />
             </div>
           </div>
         </form>
