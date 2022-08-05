@@ -13,6 +13,7 @@ textarea {
 
 .title {
   background-color: var(--yellow);
+  text-align: center;
 }
 
 .formContainer {
@@ -37,6 +38,7 @@ textarea {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  background-color: rgba(55, 55, 55, 0.5);
 }
 
 .stepsAndIngredients {
@@ -44,16 +46,64 @@ textarea {
   flex-direction: row;
   width: 100%;
   height: 100%;
-  background-color: lightcoral;
 }
 
-.step {
+.labelInputFormatter {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
 }
 
-.ingredient {
+.stepInputs {
+  width: 90%;
+  border-radius: 0px;
+  border-color: lightgray;
+  font-family: var(--fontPoppins);
+}
+
+.ingredientInputs {
+  border-radius: 0px;
+  border-color: lightgray;
+  width: 50%;
+  font-family: var(--fontPoppins);
+}
+
+.stepInputs:focus {
+  outline: none;
+}
+
+.ingredientInputs:focus {
+  outline: none;
+}
+
+.select {
+  width: 50%;
+  border-radius: 0px;
+  border-color: lightgray;
+}
+
+.button {
+  background-color: var(--green);
+  font-family: var(--fontPoppins);
+  color: white;
+  border: none;
+  padding: 3px 5px;
+  margin: 0px 5px;
+  font-size: 20px;
+  width: auto;
+  border-radius: 5px;
+  height: 50px;
+  width: 100%;
+}
+
+.option {
+  font-family: var(--fontPoppins);
+}
+
+.background {
+  background-image: url("bg.jpg");
+  background-size: cover;
+  color: white;
   display: flex;
-  flex-direction: column;
+  isolation: isolate;
 }

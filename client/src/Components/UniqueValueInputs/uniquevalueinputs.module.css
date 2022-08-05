@@ -24,7 +24,7 @@
 }
 
 .p {
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }
 
 .staticInputs {
@@ -32,6 +32,7 @@
   border-radius: 0px;
   border-color: lightgray;
   margin-top: 5px;
+  font-family: var(--fontPoppins);
 }
 
 .staticInputs:focus {

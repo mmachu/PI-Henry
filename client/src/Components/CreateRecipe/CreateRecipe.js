@@ -9,6 +9,7 @@ import UniqueValueInputs from "../UniqueValueInputs/UniqueValueInputs.js";
 import AddSteps from "../AddSteps/AddSteps.js";
 import AddIngredients from "../AddIngredients/AddIngredients.js";
 import AddDiets from "../AddDiets/AddDiets.js";
+import RecipeDetail from "../RecipeDetail/RecipeDetail.jsx";
 
 const axios = require("axios").default;
 
@@ -29,7 +30,8 @@ const CreateRecipe = () => {
   ]);
   const [diets, setDiets] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState("");
+  const [confirm, setConfirm] = useState(false);
+  const [info, setInfo] = useState([]);
 
   const dispatch = useDispatch();
   const allDiets = useSelector((state) => state.diets);
@@ -38,9 +40,19 @@ const CreateRecipe = () => {
     await axios
       .get("http://localhost:3001/diets")
       .then((response) => {
-        let dbDiets = [];
-        response.data.map((diet) => dbDiets.push(diet.name));
-        dispatch(loadDiets(dbDiets));
+        // let dbDiets = [];
+        // console.log(response.data);
+        // response.data.map((diet) => dbDiets.push(diet.name));
+        let formatedDiets = response.data;
+        formatedDiets.forEach((diet) => {
+          let dietWords = diet.name.split(" ");
+          let dietName = dietWords.map((word) => {
+            return word[0].toUpperCase() + word.slice(1);
+          });
+          diet.name = dietName.join(" ");
+        });
+
+        dispatch(loadDiets(formatedDiets));
       })
       .catch((err) => {
         console.log(err);
@@ -116,7 +128,6 @@ const CreateRecipe = () => {
   };
 
   const handleChangeIngredient = (e, ingredientNumber) => {
-    console.log(ingredients);
     if (e.target.value.length === 0) {
       let newIngredients = [...ingredients];
       newIngredients[ingredientNumber] = {
@@ -141,8 +152,9 @@ const CreateRecipe = () => {
   };
 
   const handleChangeDiet = (e, i) => {
+    let selectedDiet = allDiets.filter((diet) => diet.name === e.target.value);
     let oldDiets = [...diets];
-    oldDiets[i] = e.target.value;
+    oldDiets[i] = selectedDiet[0];
     setDiets([...oldDiets]);
   };
 
@@ -160,14 +172,14 @@ const CreateRecipe = () => {
 
   const handleAddDiet = () => {
     const newDiets = [...diets];
-    newDiets.push("");
+    newDiets.push({ id: -1, diet: "" });
     setDiets([...newDiets]);
   };
 
   const handleRemoveStep = () => {
     if (steps.length <= 5) {
       setIsOpen(true);
-      setError("Se necesitan al menos 5 pasos en la receta");
+      setInfo(["Se necesitan al menos 5 pasos en la receta"]);
     } else {
       const newSteps = [...steps];
       newSteps.pop();
@@ -178,7 +190,7 @@ const CreateRecipe = () => {
   const handleRemoveIngredient = () => {
     if (ingredients.length <= 2) {
       setIsOpen(true);
-      setError("Se necesitan al menos 2 ingredientes en la receta");
+      setInfo(["Se necesitan al menos 2 ingredientes en la receta"]);
     } else {
       const newIngredients = [...ingredients];
       newIngredients.pop();
@@ -196,9 +208,10 @@ const CreateRecipe = () => {
   const showSteps = () => {
     return steps.map((step) => {
       return (
-        <div className={styles.step} key={step.number}>
+        <div className={styles.labelInputFormatter} key={step.number}>
           <label>Paso {step.number + 1}</label>
           <input
+            className={styles.stepInputs}
             id={`step-${step.number}`}
             type="text"
             name="step"
@@ -214,44 +227,47 @@ const CreateRecipe = () => {
   const showIngredients = () => {
     return ingredients.map((ing) => {
       return (
-        <div className={styles.ingredient} key={ing.number}>
+        <div className={styles.labelInputFormatter} key={ing.number}>
           <label>Ingrediente {ing.number + 1}</label>
           <input
+            className={styles.ingredientInputs}
             id={`ingredient-${ing.number}`}
             type="text"
             name={`ingredient ${ing.number}`}
             value={ing.ingredient}
             onChange={(e) => handleChangeIngredient(e, ing.number)}
           />
+          <label>{`${ing.ingredient.length}`}/20 caracteres</label>
         </div>
       );
     });
   };
 
   const showDiets = () => {
-    const formattedDiets = allDiets.map((diet) => {
-      let splitDiet = diet.split(" ");
-      let formattedDiet = splitDiet.map((word) => {
-        return word[0].toUpperCase() + word.slice(1);
-      });
-      return formattedDiet.join(" ");
-    });
     if (diets.length > 0) {
-      return diets.map((diet, i) => {
+      return diets.map((dietAdded, i) => {
         return (
-          <div className={styles.ingredient} key={i}>
+          <div className={styles.labelInputFormatter} key={i}>
             <label>Dieta {i + 1}</label>
             <select
+              className={styles.select}
               id={i}
               onChange={(e) => handleChangeDiet(e, i)}
               key={i}
               name="dietas"
             >
-              <option value="">Seleccione una dieta</option>
-              {formattedDiets.map((diet, n) => {
+              <option className={styles.option} value="">
+                Seleccione una dieta
+              </option>
+              {allDiets.map((diet, n) => {
                 return (
-                  <option key={diet} id={`${diet}${n}`} value={diet}>
-                    {diet}
+                  <option
+                    className={styles.option}
+                    key={diet.name}
+                    id={`${diet.id} + ${diet.name}`}
+                    value={diet.name}
+                  >
+                    {diet.name}
                   </option>
                 );
               })}
@@ -262,43 +278,149 @@ const CreateRecipe = () => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let errors = recordChecker([
+      { field: "diets", data: diets },
+      //{ field: "steps", data: steps },
+      //{ field: "ingredients", data: ingredients },
+    ]);
+    if (errors.length > 0) {
+      setIsOpen(true);
+      setInfo([...errors]);
+    } else {
+      let ingValues = ingredients.map((ing) => ing.ingredient);
+      const newRecord = {
+        title: title,
+        summary: description,
+        healthScore: healthScore,
+        analyzedInstructions: [...steps],
+        ingredients: [...ingValues],
+        diets: [...diets],
+      };
+    }
+  };
+
+  const recordChecker = (arrFields) => {
+    const status = [];
+    console.log(arrFields);
+    arrFields.forEach((arr) => {
+      let field = arr.field;
+      let data = arr.data;
+      let properties = data.length > 0 ? Object.keys(data[0]) : null;
+      if (data.length > 0) {
+        let isEmpty = false;
+        let values = [];
+        data.forEach((el) => {
+          let cleanValue = el[properties[1]];
+          values.push(cleanValue);
+          if (cleanValue === "" && !isEmpty) {
+            status.push(errorDescription(field, "empty"));
+            isEmpty = true;
+          }
+        });
+        let isRepetead = false;
+        let testArr = [...values];
+        values.forEach((el) => {
+          testArr.shift();
+          if (el !== "" && testArr.includes(el) && !isRepetead) {
+            status.push(errorDescription(field, "repeated"));
+            isRepetead = true;
+          }
+        });
+      }
+    });
+    return status;
+  };
+
+  const errorDescription = (field, error) => {
+    switch (field) {
+      case "diets":
+        if (error === "empty") {
+          return "No puede haber dietas vacias";
+        }
+        if (error === "repeated") {
+          return "No puede haber dietas repetidas";
+        }
+        break;
+      case "steps":
+        if (error === "empty") {
+          return "No puede haber pasos vacíos";
+        }
+        if (error === "repeated") {
+          return "No puede haber pasos repetidos";
+        }
+        break;
+      case "ingredients":
+        if (error === "empty") {
+          return "No puede haber ingredientes vacíos";
+        }
+        if (error === "repeated") {
+          return "No puede haber ingredientes repetidos";
+        }
+        break;
+      default:
+        return "Recipe is invalid";
+        break;
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      {isOpen && (
-        <ErrorModal setIsOpen={setIsOpen} error={error} setError={setError} />
-      )}
-      <Navigation />
-      <h3 className={styles.title}>Cargue los datos de la nueva receta</h3>
-      <div className={styles.formContainer}>
-        <form className={styles.formStyle}>
-          <div className={styles.inputContainer}>
-            <UniqueValueInputs
-              title={title}
-              handleChangeTitle={handleChangeTitle}
-              healthScore={healthScore}
-              handleChangeHS={handleChangeHS}
-              description={description}
-              handleChangeDescription={handleChangeDescription}
-            />
-            <div className={styles.stepsAndIngredients}>
-              <AddSteps
-                handleAddStep={handleAddStep}
-                handleRemoveStep={handleRemoveStep}
-                showSteps={showSteps}
+    <div className={styles.background}>
+      <div className={styles.container}>
+        {isOpen && (
+          <ErrorModal setIsOpen={setIsOpen} info={info} setInfo={setInfo} />
+        )}
+        {confirm && (
+          <RecipeDetail
+            newRecipe={() => {
+              return {
+                title: title,
+                summary: description,
+                healthScore: healthScore,
+                analyzedInstructions: [...steps],
+                ingredients: [...ingredients],
+                diets: [...diets],
+              };
+            }}
+          />
+        )}
+        <Navigation />
+        <h3 className={styles.title}>Cargue los datos de la nueva receta</h3>
+        <div className={styles.formContainer}>
+          <form className={styles.formStyle} onSubmit={handleSubmit}>
+            <div className={styles.inputContainer}>
+              <UniqueValueInputs
+                title={title}
+                handleChangeTitle={handleChangeTitle}
+                healthScore={healthScore}
+                handleChangeHS={handleChangeHS}
+                description={description}
+                handleChangeDescription={handleChangeDescription}
               />
-              <AddIngredients
-                handleAddIngredient={handleAddIngredient}
-                handleRemoveIngredient={handleRemoveIngredient}
-                showIngredients={showIngredients}
-              />
-              <AddDiets
-                handleAddDiet={handleAddDiet}
-                handleRemoveDiet={handleRemoveDiet}
-                showDiets={showDiets}
-              />
+              <div className={styles.stepsAndIngredients}>
+                <AddSteps
+                  handleAddStep={handleAddStep}
+                  handleRemoveStep={handleRemoveStep}
+                  showSteps={showSteps}
+                />
+                <AddIngredients
+                  handleAddIngredient={handleAddIngredient}
+                  handleRemoveIngredient={handleRemoveIngredient}
+                  showIngredients={showIngredients}
+                />
+                <AddDiets
+                  handleAddDiet={handleAddDiet}
+                  handleRemoveDiet={handleRemoveDiet}
+                  showDiets={showDiets}
+                />
+              </div>
+              <button className={styles.button} type="submit">
+                Guardar receta
+              </button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

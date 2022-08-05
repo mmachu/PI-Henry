@@ -4,16 +4,21 @@ import { NavLink } from "react-router-dom";
 import { GiCook } from "react-icons/gi";
 
 import styles from "./recipedetail.module.css";
-const RecipeDetail = (props) => {
+const RecipeDetail = ({ newRecipe }) => {
+  //Parametro nuevo
   const [recipe, setRecipe] = useState({});
   const { id } = useParams();
   const axios = require("axios").default;
 
   useEffect(async () => {
-    await axios.get(`http://localhost:3001/recipes/${id}`).then((res) => {
-      setRecipe(res.data);
-      console.log(res.data);
-    });
+    if (newRecipe === undefined) {
+      await axios.get(`http://localhost:3001/recipes/${id}`).then((res) => {
+        setRecipe(res.data);
+        console.log(res.data);
+      });
+    } else {
+      setRecipe(newRecipe);
+    }
   }, []);
 
   const mapIngredients = () => {

@@ -2,10 +2,16 @@ import React from "react";
 import styles from "./errormodal.module.css";
 import { RiCloseLine } from "react-icons/ri";
 
-const ErrorModal = ({ setIsOpen, error, setError }) => {
+const ErrorModal = ({ setIsOpen, info, setInfo }) => {
   const handleClose = () => {
     setIsOpen(false);
-    setError("");
+    setInfo([]);
+  };
+
+  const renderError = () => {
+    return info.map((err, index) => {
+      return <p key={index}>{err}</p>;
+    });
   };
 
   return (
@@ -17,7 +23,7 @@ const ErrorModal = ({ setIsOpen, error, setError }) => {
             <RiCloseLine style={{ marginBottom: "-3px" }} />
           </button>
           <div className={styles.modalContent}>
-            <p>{error}</p>
+            <p>{renderError()}</p>
           </div>
         </div>
       </div>

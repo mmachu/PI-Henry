@@ -8,7 +8,7 @@ const AddIngredients = ({
 }) => {
   return (
     <div className={styles.ingredientsContainer}>
-      <h3>Ingredientes</h3>
+      <h3 className={styles.h3}>Ingredientes</h3>
       <div className={styles.buttonContainer}>
         <button
           className={styles.button}
