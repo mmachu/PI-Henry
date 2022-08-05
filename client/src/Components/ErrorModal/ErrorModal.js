@@ -9,9 +9,13 @@ const ErrorModal = ({ setIsOpen, info, setInfo }) => {
   };
 
   const renderError = () => {
-    return info.map((err, index) => {
-      return <p key={index}>{err}</p>;
-    });
+    return (
+      <ul className={styles.ul}>
+        {info.map((err, index) => {
+          return <li key={index}>{err}</li>;
+        })}
+      </ul>
+    );
   };
 
   return (

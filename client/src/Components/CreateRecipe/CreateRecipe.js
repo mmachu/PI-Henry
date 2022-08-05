@@ -278,26 +278,45 @@ const CreateRecipe = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = recordChecker([
       { field: "diets", data: diets },
-      //{ field: "steps", data: steps },
-      //{ field: "ingredients", data: ingredients },
+      { field: "steps", data: steps },
+      { field: "ingredients", data: ingredients },
     ]);
+    if (title.length === 0)
+      errors.push("El título de la receta no puede estar vacío");
+    if (description.length === 0)
+      errors.push("La descripción no puede estar vacía");
     if (errors.length > 0) {
       setIsOpen(true);
       setInfo([...errors]);
     } else {
       let ingValues = ingredients.map((ing) => ing.ingredient);
+      let formatDiets = [];
+      diets.forEach((diet) => {
+        let dietWords = diet.name.split(" ");
+        let dietName = dietWords.map((word) => {
+          return word[0].toLowerCase() + word.slice(1);
+        });
+        diet.name = dietName.join(" ");
+        formatDiets.push(diet);
+      });
       const newRecord = {
         title: title,
         summary: description,
         healthScore: healthScore,
         analyzedInstructions: [...steps],
         ingredients: [...ingValues],
-        diets: [...diets],
+        diets: [...formatDiets],
       };
+      console.log(newRecord);
+      await axios
+        .post("http://localhost:3001/recipes", newRecord)
+        .then((res) => {
+          console.log(res);
+        });
     }
   };
 
