@@ -10,6 +10,7 @@ import AddSteps from "../AddSteps/AddSteps.js";
 import AddIngredients from "../AddIngredients/AddIngredients.js";
 import AddDiets from "../AddDiets/AddDiets.js";
 import RecipeDetail from "../RecipeDetail/RecipeDetail.jsx";
+import ConfirmModal from "../ConfirmModal/ConfirmModal.js";
 
 const axios = require("axios").default;
 
@@ -29,10 +30,10 @@ const CreateRecipe = () => {
     { number: 1, ingredient: "" },
   ]);
   const [diets, setDiets] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [confirm, setConfirm] = useState(false);
+  const [errorIsOpen, setErrorIsOpen] = useState(false);
+  const [confirmIsOpen, setConfirmIsOpen] = useState(false);
   const [info, setInfo] = useState([]);
-
+  const [newRecipe, setNewRecipe] = useState({});
   const dispatch = useDispatch();
   const allDiets = useSelector((state) => state.diets);
 
@@ -40,11 +41,8 @@ const CreateRecipe = () => {
     await axios
       .get("http://localhost:3001/diets")
       .then((response) => {
-        // let dbDiets = [];
-        // console.log(response.data);
-        // response.data.map((diet) => dbDiets.push(diet.name));
-        let formatedDiets = response.data;
-        formatedDiets.forEach((diet) => {
+        let formattedDiets = response.data;
+        formattedDiets.forEach((diet) => {
           let dietWords = diet.name.split(" ");
           let dietName = dietWords.map((word) => {
             return word[0].toUpperCase() + word.slice(1);
@@ -52,7 +50,7 @@ const CreateRecipe = () => {
           diet.name = dietName.join(" ");
         });
 
-        dispatch(loadDiets(formatedDiets));
+        dispatch(loadDiets(formattedDiets));
       })
       .catch((err) => {
         console.log(err);
@@ -178,7 +176,7 @@ const CreateRecipe = () => {
 
   const handleRemoveStep = () => {
     if (steps.length <= 5) {
-      setIsOpen(true);
+      setErrorIsOpen(true);
       setInfo(["Se necesitan al menos 5 pasos en la receta"]);
     } else {
       const newSteps = [...steps];
@@ -189,7 +187,7 @@ const CreateRecipe = () => {
 
   const handleRemoveIngredient = () => {
     if (ingredients.length <= 2) {
-      setIsOpen(true);
+      setErrorIsOpen(true);
       setInfo(["Se necesitan al menos 2 ingredientes en la receta"]);
     } else {
       const newIngredients = [...ingredients];
@@ -289,8 +287,10 @@ const CreateRecipe = () => {
       errors.push("El título de la receta no puede estar vacío");
     if (description.length === 0)
       errors.push("La descripción no puede estar vacía");
+    if (healthScore.length === 0)
+      errors.push("El health score no puede estar vacío");
     if (errors.length > 0) {
-      setIsOpen(true);
+      setErrorIsOpen(true);
       setInfo([...errors]);
     } else {
       let ingValues = ingredients.map((ing) => ing.ingredient);
@@ -311,12 +311,13 @@ const CreateRecipe = () => {
         ingredients: [...ingValues],
         diets: [...formatDiets],
       };
-      console.log(newRecord);
-      await axios
-        .post("http://localhost:3001/recipes", newRecord)
-        .then((res) => {
-          console.log(res);
-        });
+      setNewRecipe(newRecord);
+      setConfirmIsOpen(true);
+      // await axios
+      //   .post("http://localhost:3001/recipes", newRecord)
+      //   .then((res) => {
+      //     console.log(res);
+      //   });
     }
   };
 
@@ -387,21 +388,13 @@ const CreateRecipe = () => {
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        {isOpen && (
-          <ErrorModal setIsOpen={setIsOpen} info={info} setInfo={setInfo} />
+        {errorIsOpen && (
+          <ErrorModal errorIsOpen={errorIsOpen} info={info} setInfo={setInfo} />
         )}
-        {confirm && (
-          <RecipeDetail
-            newRecipe={() => {
-              return {
-                title: title,
-                summary: description,
-                healthScore: healthScore,
-                analyzedInstructions: [...steps],
-                ingredients: [...ingredients],
-                diets: [...diets],
-              };
-            }}
+        {confirmIsOpen && (
+          <ConfirmModal
+            setConfirmIsOpen={setConfirmIsOpen}
+            newRecipe={newRecipe}
           />
         )}
         <Navigation />

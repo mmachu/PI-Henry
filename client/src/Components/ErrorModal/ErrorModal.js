@@ -2,9 +2,9 @@ import React from "react";
 import styles from "./errormodal.module.css";
 import { RiCloseLine } from "react-icons/ri";
 
-const ErrorModal = ({ setIsOpen, info, setInfo }) => {
+const ErrorModal = ({ setConfirmIsOpen, info, setInfo }) => {
   const handleClose = () => {
-    setIsOpen(false);
+    setConfirmIsOpen(false);
     setInfo([]);
   };
 
