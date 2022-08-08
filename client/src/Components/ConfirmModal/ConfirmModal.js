@@ -1,34 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./confirmmodal.module.css";
 const axios = require("axios").default;
 
-const ConfirmModal = ({ setConfirmIsOpen, newRecipe }) => {
-  const handleClose = () => {
+const ConfirmModal = ({ setConfirmIsOpen, newRecipe, handleReset }) => {
+  const [apiMessage, setApiMessage] = useState("");
+
+  const handleClose = (e) => {
+    if (e.target.id === "reset") {
+      handleReset();
+    }
     setConfirmIsOpen(false);
   };
 
   const saveRecipe = async () => {
-    await axios.post("http://localhost:3001/recipes", newRecipe).then((res) => {
-      if (res.status === 201) {
-        console.log("se guardo la recetita");
-      } else {
-        console.log(res.data.error);
-      }
-    });
+    await axios
+      .post("http://localhost:3001/recipes", newRecipe)
+      .then((res) => {
+        setApiMessage("Receta guardada con exito!");
+      })
+      .catch((err) => {
+        console.log(err);
+        setApiMessage(err.response.data.message);
+      });
+  };
+
+  const renderMessage = () => {
+    return (
+      <div>
+        <h2>Ocurrio el siguiente error:</h2>
+        <h4>{apiMessage}</h4>
+        <button
+          id="reset"
+          className={`${styles.cancel} ${styles.button}`}
+          onClick={handleClose}
+        >
+          Cerrar
+        </button>
+      </div>
+    );
   };
 
   const renderDiet = () => {
     return (
       <div>
-        <p>Su nueva receta es:</p>
+        <h3>Su nueva receta es:</h3>
         <ul className={styles.ul}>
-          <label>Titulo</label>
+          <h4>Titulo</h4>
           <li>{newRecipe.title}</li>
-          <label>Health Score:</label>
+          <h4>Health Score:</h4>
           <li>{newRecipe.healthScore}</li>
-          <label>Descripcion:</label>
+          <h4>Descripcion:</h4>
           <li>{newRecipe.summary}</li>
-          <label>Pasos:</label>
+          <h4>Pasos:</h4>
           {newRecipe.analyzedInstructions.map((step, index) => {
             return (
               <li key={index}>
@@ -36,11 +59,11 @@ const ConfirmModal = ({ setConfirmIsOpen, newRecipe }) => {
               </li>
             );
           })}
-          <label>Ingredientes:</label>
+          <h4>Ingredientes:</h4>
           {newRecipe.ingredients.map((ing, index) => {
-            return <li key={index}>{ing.ingredient}</li>;
+            return <li key={index}>{ing}</li>;
           })}
-          <label>Dietas:</label>
+          <h4>Dietas:</h4>
           {newRecipe.diets.length > 0 ? (
             newRecipe.diets.map((diet, index) => {
               return <li key={index}>{diet.name}</li>;
@@ -49,8 +72,18 @@ const ConfirmModal = ({ setConfirmIsOpen, newRecipe }) => {
             <li>No tiene dietas</li>
           )}
         </ul>
-        <button onClick={handleClose}>Cancelar</button>
-        <button onClick={saveRecipe}>Guardar</button>
+        <button
+          className={`${styles.cancel} ${styles.button}`}
+          onClick={handleClose}
+        >
+          Cancelar
+        </button>
+        <button
+          className={`${styles.save} ${styles.button}`}
+          onClick={saveRecipe}
+        >
+          Guardar
+        </button>
       </div>
     );
   };
@@ -60,7 +93,9 @@ const ConfirmModal = ({ setConfirmIsOpen, newRecipe }) => {
       <div className={styles.darkBG} />
       <div className={styles.centered}>
         <div className={styles.modal}>
-          <div className={styles.modalContent}>{renderDiet()}</div>
+          <div className={styles.modalContent}>
+            {apiMessage === "" ? renderDiet() : renderMessage()}
+          </div>
         </div>
       </div>
     </>

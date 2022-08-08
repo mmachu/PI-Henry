@@ -2,9 +2,9 @@ import React from "react";
 import styles from "./errormodal.module.css";
 import { RiCloseLine } from "react-icons/ri";
 
-const ErrorModal = ({ setConfirmIsOpen, info, setInfo }) => {
+const ErrorModal = ({ setErrorIsOpen, info, setInfo }) => {
   const handleClose = () => {
-    setConfirmIsOpen(false);
+    setErrorIsOpen(false);
     setInfo([]);
   };
 
@@ -27,7 +27,7 @@ const ErrorModal = ({ setConfirmIsOpen, info, setInfo }) => {
             <RiCloseLine style={{ marginBottom: "-3px" }} />
           </button>
           <div className={styles.modalContent}>
-            <p>{renderError()}</p>
+            <span>{renderError()}</span>
           </div>
         </div>
       </div>

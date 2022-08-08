@@ -136,6 +136,7 @@ router.post("/recipes", async (req, res) => {
     diets,
     ingredients,
   } = req.body;
+
   try {
     const dietList = await Diet.findAll();
     const dietLower = dietList.map((diet) => diet.name.toLowerCase());

@@ -57,6 +57,24 @@ const CreateRecipe = () => {
       });
   }, []);
 
+  const handleReset = () => {
+    setTitle("");
+    setHealthScore(0);
+    setDescription("");
+    setSteps([
+      { number: 0, step: "" },
+      { number: 1, step: "" },
+      { number: 2, step: "" },
+      { number: 3, step: "" },
+      { number: 4, step: "" },
+    ]);
+    setIngredients([
+      { number: 0, ingredient: "" },
+      { number: 1, ingredient: "" },
+    ]);
+    setDiets([]);
+  };
+
   const handleChangeTitle = (e) => {
     if (e.target.value.length === 0) {
       setTitle(e.target.value);
@@ -278,46 +296,43 @@ const CreateRecipe = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let errors = recordChecker([
-      { field: "diets", data: diets },
-      { field: "steps", data: steps },
-      { field: "ingredients", data: ingredients },
-    ]);
-    if (title.length === 0)
-      errors.push("El título de la receta no puede estar vacío");
-    if (description.length === 0)
-      errors.push("La descripción no puede estar vacía");
-    if (healthScore.length === 0)
-      errors.push("El health score no puede estar vacío");
-    if (errors.length > 0) {
-      setErrorIsOpen(true);
-      setInfo([...errors]);
-    } else {
-      let ingValues = ingredients.map((ing) => ing.ingredient);
-      let formatDiets = [];
-      diets.forEach((diet) => {
-        let dietWords = diet.name.split(" ");
-        let dietName = dietWords.map((word) => {
-          return word[0].toLowerCase() + word.slice(1);
+    if (!errorIsOpen && !confirmIsOpen) {
+      let errors = recordChecker([
+        { field: "diets", data: diets },
+        { field: "steps", data: steps },
+        { field: "ingredients", data: ingredients },
+      ]);
+      if (title.length === 0)
+        errors.push("El título de la receta no puede estar vacío");
+      if (description.length === 0)
+        errors.push("La descripción no puede estar vacía");
+      if (healthScore.length === 0)
+        errors.push("El health score no puede estar vacío");
+      if (errors.length > 0) {
+        setErrorIsOpen(true);
+        setInfo([...errors]);
+      } else {
+        let ingValues = ingredients.map((ing) => ing.ingredient);
+        let formatDiets = [];
+        diets.forEach((diet) => {
+          let dietWords = diet.name.split(" ");
+          let dietName = dietWords.map((word) => {
+            return word[0].toLowerCase() + word.slice(1);
+          });
+          diet.name = dietName.join(" ");
+          formatDiets.push(diet);
         });
-        diet.name = dietName.join(" ");
-        formatDiets.push(diet);
-      });
-      const newRecord = {
-        title: title,
-        summary: description,
-        healthScore: healthScore,
-        analyzedInstructions: [...steps],
-        ingredients: [...ingValues],
-        diets: [...formatDiets],
-      };
-      setNewRecipe(newRecord);
-      setConfirmIsOpen(true);
-      // await axios
-      //   .post("http://localhost:3001/recipes", newRecord)
-      //   .then((res) => {
-      //     console.log(res);
-      //   });
+        const newRecord = {
+          title: title,
+          summary: description,
+          healthScore: healthScore,
+          analyzedInstructions: [...steps],
+          ingredients: [...ingValues],
+          diets: [...formatDiets],
+        };
+        setNewRecipe(newRecord);
+        setConfirmIsOpen(true);
+      }
     }
   };
 
@@ -387,16 +402,21 @@ const CreateRecipe = () => {
 
   return (
     <div className={styles.background}>
+      {errorIsOpen && (
+        <ErrorModal
+          setErrorIsOpen={setErrorIsOpen}
+          info={info}
+          setInfo={setInfo}
+        />
+      )}
+      {confirmIsOpen && (
+        <ConfirmModal
+          setConfirmIsOpen={setConfirmIsOpen}
+          newRecipe={newRecipe}
+          handleReset={handleReset}
+        />
+      )}
       <div className={styles.container}>
-        {errorIsOpen && (
-          <ErrorModal errorIsOpen={errorIsOpen} info={info} setInfo={setInfo} />
-        )}
-        {confirmIsOpen && (
-          <ConfirmModal
-            setConfirmIsOpen={setConfirmIsOpen}
-            newRecipe={newRecipe}
-          />
-        )}
         <Navigation />
         <h3 className={styles.title}>Cargue los datos de la nueva receta</h3>
         <div className={styles.formContainer}>

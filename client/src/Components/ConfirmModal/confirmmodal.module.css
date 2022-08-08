@@ -18,7 +18,6 @@
 
 .modal {
   width: 350px;
-  /*height: 200px; */
   background: white;
   color: white;
   z-index: 10;
@@ -27,6 +26,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: var(--fontPoppins);
 }
 
 .modalContent {
@@ -70,5 +70,23 @@
 .ul {
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin-bottom: 25px;
+}
+
+.button {
+  padding: 5px 10px;
+  margin: 3px 5px;
+  color: white;
+  border-radius: 5px;
+  border-style: none;
+
+  font-family: var(--fontPoppins);
+}
+
+.save {
+  background-color: rgba(73, 112, 29, 1);
+}
+
+.cancel {
+  background-color: rgba(235, 123, 19, 1);
 }
