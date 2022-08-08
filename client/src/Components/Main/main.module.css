@@ -41,7 +41,7 @@ h4 {
   margin: 10px 0px;
 }
 
-.button {
+/* .button {
   margin: 15px 0px 0px 0px;
   border: none;
   border-style: none;
@@ -50,10 +50,20 @@ h4 {
   background-color: var(--yellow);
   color: white;
   font-family: "Poppins", sans-serif;
-}
+} */
 
 button:hover {
   cursor: pointer;
+}
+
+.button {
+  width: 450px;
+  height: 250px;
+  font-size: 70px;
+  font-family: "Poppins", sans-serif;
+  background-color: rgba(255, 202, 104, 1);
+  color: white;
+  border-style: none;
 }
 
 .inputMain {

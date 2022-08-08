@@ -60,6 +60,7 @@ router.get("/recipes", async (req, res) => {
             let results = [...spoonacularResults, ...recipes];
 
             let dietsArr = Array.from(helper.recipeExtractDiets(results));
+            console.log(dietsArr);
             results.sort((a, b) => {
               return a.title < b.title ? -1 : 1;
             });
@@ -114,7 +115,8 @@ router.get("/recipes/:id", async (req, res) => {
                   healthScore: allData.healthScore,
                   analyzedInstructions: allData.analyzedInstructions,
                 };
-                recipe = helper.byIdCleanup(recipe.results);
+                console.log(recipe);
+                recipe = helper.byIdCleanup(recipe);
                 res.status(200).send(recipe);
               });
           }
@@ -163,15 +165,6 @@ router.post("/recipes", async (req, res) => {
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
-});
-
-router.get("/test", async (req, res) => {
-  const rectitas = await Recipe.findAll({
-    include: [
-      { model: Diet, attributes: ["name"], through: { attributes: [] } },
-    ],
-  });
-  res.status(200).send(rectitas);
 });
 
 module.exports = router;

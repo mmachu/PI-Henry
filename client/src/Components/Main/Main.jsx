@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { NavLink } from "react-router-dom";
 import styles from "./main.module.css";
 import { TbDeviceFloppy, TbFilter } from "react-icons/tb";
 import { MdOutlineCreate, MdSearch } from "react-icons/md";
@@ -27,29 +27,33 @@ const Main = () => {
     imageID === 2 ? (imageID = 0) : imageID++;
   };
 
-  const handleSelection = (e) => {
-    const register = document.getElementById("r");
-    const login = document.getElementById("l");
-    if (
-      e.currentTarget.id === "l" &&
-      register.classList.contains(styles.active)
-    ) {
-      register.classList.remove(styles.active);
-      login.classList.add(styles.active);
-      setUserSelection(true);
-    } else if (
-      e.currentTarget.id === "r" &&
-      login.classList.contains(styles.active)
-    ) {
-      login.classList.remove(styles.active);
-      register.classList.add(styles.active);
-      setUserSelection(false);
-    }
+  const stopInterval = () => {
+    clearInterval(intervalID);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+  // const handleSelection = (e) => {
+  //   const register = document.getElementById("r");
+  //   const login = document.getElementById("l");
+  //   if (
+  //     e.currentTarget.id === "l" &&
+  //     register.classList.contains(styles.active)
+  //   ) {
+  //     register.classList.remove(styles.active);
+  //     login.classList.add(styles.active);
+  //     setUserSelection(true);
+  //   } else if (
+  //     e.currentTarget.id === "r" &&
+  //     login.classList.contains(styles.active)
+  //   ) {
+  //     login.classList.remove(styles.active);
+  //     register.classList.add(styles.active);
+  //     setUserSelection(false);
+  //   }
+  // };
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  // };
 
   return (
     <section className={styles.background}>
@@ -79,7 +83,7 @@ const Main = () => {
         </div>
       </div>
       <div className={styles.formContainer}>
-        <div className={styles.form}>
+        {/* <div className={styles.form}>
           <div className={styles.formButtonsContainer}>
             <div
               id="l"
@@ -99,7 +103,15 @@ const Main = () => {
           <form className={styles.userLogin} onSubmit={handleSubmit}>
             {userSelection ? <Login intervalID={intervalID} /> : <Register />}
           </form>
-        </div>
+        </div> */}
+
+        <NavLink
+          className={styles.button}
+          to="/searchRecipe"
+          onClick={stopInterval}
+        >
+          <button className={styles.button}>Ingresar</button>
+        </NavLink>
       </div>
     </section>
   );

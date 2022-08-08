@@ -1,7 +1,7 @@
 export const LOAD_RECIPES = "LOAD_RECIPES";
 export const GET_RECIPES = "GET_RECIPES";
 export const LOAD_DIETS = "LOAD_DIETS";
-
+export const LOAD_ALL_DIETS = "LOAD_ALL_DIETS";
 export const SELECT_RECIPE = "SELECT_RECIPE";
 export const WIPE_RECIPES = "WIPE_RECIPES";
 export const UNSELECT_RECIPE = "UNSELECT_RECIPE";
@@ -25,6 +25,13 @@ export const getLoadedRecipes = () => {
 export const loadDiets = (diets) => {
   return {
     type: LOAD_DIETS,
+    payload: diets,
+  };
+};
+
+export const loadAllDiets = (diets) => {
+  return {
+    type: LOAD_ALL_DIETS,
     payload: diets,
   };
 };

@@ -2,23 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { GiCook } from "react-icons/gi";
-
+import Navigation from "../Navigation/Navigation.js";
 import styles from "./recipedetail.module.css";
-const RecipeDetail = ({ newRecipe }) => {
+const RecipeDetail = () => {
   //Parametro nuevo
   const [recipe, setRecipe] = useState({});
   const { id } = useParams();
   const axios = require("axios").default;
 
   useEffect(async () => {
-    if (newRecipe === undefined) {
-      await axios.get(`http://localhost:3001/recipes/${id}`).then((res) => {
-        setRecipe(res.data);
-        console.log(res.data);
-      });
-    } else {
-      setRecipe(newRecipe);
-    }
+    await axios.get(`http://localhost:3001/recipes/${id}`).then((res) => {
+      setRecipe(res.data);
+      console.log(res.data);
+    });
   }, []);
 
   const mapIngredients = () => {
@@ -48,6 +44,7 @@ const RecipeDetail = ({ newRecipe }) => {
     } else {
       return (
         <div className={styles.container}>
+          <Navigation />
           <div className={styles.title}>{recipe.title}</div>
           <div className={styles.description}>{recipe.summary}</div>
           <div className={styles.mainSection}>

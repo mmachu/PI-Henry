@@ -10,7 +10,7 @@ function App() {
   return (
     <React.Fragment>
       <Route exact path="/" component={Main} />
-      <Route path="/index" component={RecipeSearch} />
+      <Route path="/searchRecipe" component={RecipeSearch} />
       <Route path="/recipe/:id" component={RecipeDetail} />
       <Route path="/createRecipe" component={CreateRecipe} />
     </React.Fragment>

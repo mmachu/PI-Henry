@@ -5,22 +5,21 @@ const Navigation = () => {
   return (
     <nav className={styles.navStyle}>
       <div className={styles.navButtonsContainer}>
-        <div className={styles.navButtons}>
-          <p>Favoritos</p>
-        </div>
         <NavLink to="/createRecipe">
           <div className={styles.navButtons}>
             <p>Crear Receta</p>
           </div>
         </NavLink>
-        <NavLink to="/">
+        <NavLink to="/searchRecipe">
           <div className={styles.navButtons}>
-            <p>Ingresar Registrarse</p>
+            <p>Buscar Recetas</p>
           </div>
         </NavLink>
       </div>
       <div className={styles.navName}>
-        <p className={styles.title}>Food PI</p>
+        <NavLink to="/">
+          <p className={styles.title}>Food PI</p>
+        </NavLink>
       </div>
     </nav>
   );

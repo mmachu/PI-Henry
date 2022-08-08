@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { loadDiets } from "../../Actions/actions.js";
+import { loadAllDiets } from "../../Actions/actions.js";
 import styles from "./createrecipe.module.css";
 import Navigation from "../Navigation/Navigation.js";
 import ErrorModal from "../ErrorModal/ErrorModal.js";
@@ -35,7 +35,7 @@ const CreateRecipe = () => {
   const [info, setInfo] = useState([]);
   const [newRecipe, setNewRecipe] = useState({});
   const dispatch = useDispatch();
-  const allDiets = useSelector((state) => state.diets);
+  const allDiets = useSelector((state) => state.allDiets);
 
   useEffect(async () => {
     await axios
@@ -50,7 +50,7 @@ const CreateRecipe = () => {
           diet.name = dietName.join(" ");
         });
 
-        dispatch(loadDiets(formattedDiets));
+        dispatch(loadAllDiets(formattedDiets));
       })
       .catch((err) => {
         console.log(err);

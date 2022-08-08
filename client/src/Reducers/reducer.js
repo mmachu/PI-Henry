@@ -2,6 +2,7 @@ import {
   LOAD_RECIPES,
   GET_RECIPES,
   LOAD_DIETS,
+  LOAD_ALL_DIETS,
   SELECT_RECIPE,
   WIPE_RECIPES,
   UNSELECT_RECIPE,
@@ -12,6 +13,7 @@ const initialState = {
   selectedRecipe: null,
   lastSearched: "",
   diets: [],
+  allDiets: [],
 };
 
 export function rootReducer(state = initialState, action) {
@@ -21,6 +23,11 @@ export function rootReducer(state = initialState, action) {
       return {
         ...JSON.parse(JSON.stringify(state)),
         loadedRecipes: JSON.parse(JSON.stringify(action.payload)),
+      };
+    case LOAD_ALL_DIETS:
+      return {
+        ...JSON.parse(JSON.stringify(state)),
+        allDiets: JSON.parse(JSON.stringify(action.payload)),
       };
     case GET_RECIPES:
       console.log(...JSON.parse(JSON.stringify(state.loadedRecipes)));

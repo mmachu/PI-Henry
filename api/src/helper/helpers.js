@@ -31,6 +31,7 @@ const cleanSteps = (recipe) => {
 
 const cleanDescription = (recipe) => {
   let newDescription = [];
+  console.log(recipe);
   for (var i = 0; i < recipe.summary.length; i++) {
     if (recipe.summary[i] === "<") {
       if (recipe.summary[i + 2] === ">") {
