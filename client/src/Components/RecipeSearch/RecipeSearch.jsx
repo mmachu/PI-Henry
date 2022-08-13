@@ -118,7 +118,11 @@ const RecipeSearch = () => {
         <div className={styles.topBars}>
           <Navigation />
           <div className={styles.searchBar}>
-            <div className={styles.dietFilterButtonContainer}>
+            <div
+              className={`${styles.dietFilterButtonContainer} ${
+                recipes.length > 0 ? styles.dietFilterActive : null
+              }`}
+            >
               {recipes?.length > 0 && (
                 <div
                   className={styles.dietFilterButton}

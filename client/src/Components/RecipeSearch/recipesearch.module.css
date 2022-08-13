@@ -95,7 +95,11 @@
   /* width: 15%; */
 }
 
-.dietFilterButtonContainer:hover {
+/* .dietFilterButtonContainer:hover {
+  cursor: pointer;
+} */
+
+.dietFilterActive:hover {
   cursor: pointer;
 }
 

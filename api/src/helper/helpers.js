@@ -1,11 +1,11 @@
 const cleanSteps = (recipe) => {
   let newSteps = [];
-  let ingredients = [];
+  let ingredients = new Set();
   let broke = false;
   let steps = recipe.analyzedInstructions[0].steps
     ? recipe.analyzedInstructions[0].steps
     : recipe.analyzedInstructions;
-  console.log(steps);
+
   for (var i = 0; i < steps.length; i++) {
     if (steps[i].ingredients === undefined) {
       broke = true;
@@ -16,7 +16,7 @@ const cleanSteps = (recipe) => {
         step: steps[i].step,
       });
       for (var n = 0; n < steps[i].ingredients.length; n++) {
-        ingredients.push(steps[i].ingredients[n].name);
+        ingredients.add(steps[i].ingredients[n].name);
       }
     }
   }
@@ -24,14 +24,14 @@ const cleanSteps = (recipe) => {
     return recipe;
   } else {
     recipe.analyzedInstructions = newSteps;
-    recipe.ingredients = ingredients;
+    recipe.ingredients = Array.from(ingredients);
     return recipe;
   }
 };
 
 const cleanDescription = (recipe) => {
   let newDescription = [];
-  console.log(recipe);
+
   for (var i = 0; i < recipe.summary.length; i++) {
     if (recipe.summary[i] === "<") {
       if (recipe.summary[i + 2] === ">") {
@@ -73,7 +73,13 @@ module.exports = {
           }),
         };
       } else {
-        return recipe;
+        return {
+          id: recipe.id,
+          title: recipe.title,
+          image: recipe.image,
+          healthScore: recipe.healthScore,
+          diets: [],
+        };
       }
     });
   },

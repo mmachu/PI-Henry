@@ -67,6 +67,7 @@
 .leftColumn {
   display: flex;
   flex-direction: column;
+  margin-top: 25px;
 }
 
 .contentTitle {
@@ -74,11 +75,13 @@
   text-decoration: underline 2px;
   font-size: 25px;
   display: flex;
+  color: black;
 }
 
 .ingredientsList {
   padding: 2px;
   counter-reset: step-counter;
+  list-style: none;
 }
 
 .listItem {
@@ -105,6 +108,15 @@
 .img {
   width: 508px;
   height: 376px;
+  margin-top: 25px;
+}
+
+.loading {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: calc(50% - 100px);
+  left: calc(50% - 100px);
 }
 
 .buttonContainer {
@@ -113,4 +125,29 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.button {
+  background-color: var(--yellow);
+  font-family: var(--fontPoppins);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0px 5px;
+  width: auto;
+  border-radius: 5px;
+  height: 100%;
+}
+
+.informError {
+  position: absolute;
+  padding: 20px;
+  width: 500px;
+  text-align: center;
+  top: 40%;
+  left: calc(50% - 250px);
+  color: black;
+  font-family: var(--fontPoppins);
+  font-size: 40px;
+  background-color: rgba(235, 123, 19, 1);
 }

@@ -4,17 +4,28 @@ import { NavLink } from "react-router-dom";
 import { GiCook } from "react-icons/gi";
 import Navigation from "../Navigation/Navigation.js";
 import styles from "./recipedetail.module.css";
+import loading from "../../assets/loading.gif";
 const RecipeDetail = () => {
   //Parametro nuevo
   const [recipe, setRecipe] = useState({});
   const { id } = useParams();
   const axios = require("axios").default;
+  const [loadingData, setLoadingData] = useState(true);
+  const [error, setError] = useState(false);
+  const [errorMsj, setErrorMsj] = useState("");
 
   useEffect(async () => {
-    await axios.get(`http://localhost:3001/recipes/${id}`).then((res) => {
-      setRecipe(res.data);
-      console.log(res.data);
-    });
+    await axios
+      .get(`http://localhost:3001/recipes/${id}`)
+      .then((res) => {
+        setRecipe(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        setErrorMsj(err.response.data);
+        setError(true);
+      });
+    setLoadingData(false);
   }, []);
 
   const mapIngredients = () => {
@@ -29,7 +40,7 @@ const RecipeDetail = () => {
   };
 
   const mapSteps = () => {
-    return recipe?.analyzedInstructions?.map((step, index) => {
+    return recipe?.analyzedInstructions?.map((step) => {
       return (
         <li key={step.step} className={styles.steps}>
           {step.step}
@@ -38,13 +49,22 @@ const RecipeDetail = () => {
     });
   };
 
-  const showRecipe = () => {
-    if (!recipe.title) {
-      return <h1>Loading...</h1>;
-    } else {
+  const wasError = () => {
+    if (error && !loadingData) {
       return (
-        <div className={styles.container}>
-          <Navigation />
+        <div className={styles.informError}>
+          <h3>Ocurrio el siguiente error:</h3>
+          <p>{errorMsj}</p>
+        </div>
+      );
+    }
+  };
+
+  const isRecipe = () => {
+    if (!error && !loadingData) {
+      return (
+        <>
+          {" "}
           <div className={styles.title}>{recipe.title}</div>
           <div className={styles.description}>{recipe.summary}</div>
           <div className={styles.mainSection}>
@@ -54,16 +74,29 @@ const RecipeDetail = () => {
               <div className={styles.contentTitle}>Paso a paso</div>
               <ul className={styles.ingredientsList}>{mapSteps()}</ul>
             </div>
-            <img className={styles.img} src={recipe.image} />
+            {recipe.image !== null ? (
+              <img className={styles.img} src={recipe.image} />
+            ) : null}
           </div>
           <div className={styles.buttonContainer}>
-            <NavLink to="/index">
-              <button>Buscar otras recetas</button>
+            <NavLink to="/searchRecipe">
+              <button className={styles.button}>Buscar otras recetas</button>
             </NavLink>
           </div>
-        </div>
+        </>
       );
     }
+  };
+
+  const showRecipe = () => {
+    return (
+      <div className={styles.container}>
+        <Navigation />
+        {loadingData && <img className={styles.loading} src={loading} />}
+        {isRecipe()}
+        {wasError()}
+      </div>
+    );
   };
 
   return <div className={styles.background}>{showRecipe()}</div>;

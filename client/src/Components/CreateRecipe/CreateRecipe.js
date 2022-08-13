@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+
 import { useSelector, useDispatch } from "react-redux";
 import { loadAllDiets } from "../../Actions/actions.js";
 import styles from "./createrecipe.module.css";
@@ -9,7 +9,7 @@ import UniqueValueInputs from "../UniqueValueInputs/UniqueValueInputs.js";
 import AddSteps from "../AddSteps/AddSteps.js";
 import AddIngredients from "../AddIngredients/AddIngredients.js";
 import AddDiets from "../AddDiets/AddDiets.js";
-import RecipeDetail from "../RecipeDetail/RecipeDetail.jsx";
+
 import ConfirmModal from "../ConfirmModal/ConfirmModal.js";
 
 const axios = require("axios").default;

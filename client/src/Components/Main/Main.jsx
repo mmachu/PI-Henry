@@ -2,25 +2,25 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styles from "./main.module.css";
 import { TbDeviceFloppy, TbFilter } from "react-icons/tb";
-import { MdOutlineCreate, MdSearch } from "react-icons/md";
+import { MdBrightness1, MdOutlineCreate, MdSearch } from "react-icons/md";
 import { SiCookiecutter } from "react-icons/si";
 import Login from "../Login/Login.jsx";
 import Register from "../Register/Register.jsx";
-
+import img1 from "../../assets/main/main-bg1.jpg";
+import img2 from "../../assets/main/main-bg2.jpg";
+import img3 from "../../assets/main/main-bg3.jpg";
 const Main = () => {
   const [intervalID, setIntervalID] = useState(null);
-  const [userSelection, setUserSelection] = useState(true);
+  //const [userSelection, setUserSelection] = useState(true);
 
   useEffect(() => {
     setIntervalID(setInterval(changeBackground, 5000));
   }, []);
 
   let imageID = 0;
-  const images = [
-    "https://images.pling.com/img/00/00/61/48/12/1548289/f3bb364543e98a1e68d86a47a2927e03ec4294714cb50103cd212c20aa1b1afc7f14.jpg",
-    "https://images.pling.com/img/00/00/63/48/00/1649068/c7d26d06a8dd33e0c922d9455fdab7eacac41a3a024c810db38fa0cb636f4232cca5.jpg",
-    "https://wallpaperaccess.com/full/1412206.jpg",
-  ];
+
+  const images = [img1, img2, img3];
+
   const changeBackground = () => {
     let section = document.querySelector("section");
     section.style.backgroundImage = `url(${images[imageID]})`;
