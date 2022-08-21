@@ -16,8 +16,13 @@
   transform: translate(-50%, -50%);
 }
 
+.li {
+  max-width: 100%;
+}
+
 .modal {
-  width: 350px;
+  max-width: 100%;
+  max-height: 100vh;
   background: white;
   color: white;
   z-index: 10;
@@ -68,6 +73,8 @@
 }
 
 .ul {
+  max-width: 650px;
+  word-wrap: break-word;
   list-style-type: none;
   padding: 0;
   margin-bottom: 25px;
@@ -79,7 +86,6 @@
   color: white;
   border-radius: 5px;
   border-style: none;
-
   font-family: var(--fontPoppins);
 }
 
@@ -89,4 +95,8 @@
 
 .cancel {
   background-color: rgba(235, 123, 19, 1);
+}
+
+.over {
+  overflow-y: auto;
 }

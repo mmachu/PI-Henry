@@ -73,6 +73,7 @@ const CreateRecipe = () => {
       { number: 1, ingredient: "" },
     ]);
     setDiets([]);
+    console.log("se ejecuto handle reset");
   };
 
   const handleChangeTitle = (e) => {
@@ -296,12 +297,16 @@ const CreateRecipe = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Inicialmente dietas vale");
+    console.log(diets);
     if (!errorIsOpen && !confirmIsOpen) {
       let errors = recordChecker([
         { field: "diets", data: diets },
         { field: "steps", data: steps },
         { field: "ingredients", data: ingredients },
       ]);
+      console.log("Despues del reordChecker");
+      console.log(diets);
       if (title.length === 0)
         errors.push("El título de la receta no puede estar vacío");
       if (description.length === 0)
@@ -315,13 +320,16 @@ const CreateRecipe = () => {
         let ingValues = ingredients.map((ing) => ing.ingredient);
         let formatDiets = [];
         diets.forEach((diet) => {
+          let dietToSave = diet;
           let dietWords = diet.name.split(" ");
           let dietName = dietWords.map((word) => {
             return word[0].toLowerCase() + word.slice(1);
           });
-          diet.name = dietName.join(" ");
-          formatDiets.push(diet);
+          dietToSave.name = dietName.join(" ");
+          formatDiets.push(dietToSave);
         });
+        console.log("Despues del foreach de diets");
+        console.log(diets);
         const newRecord = {
           title: title,
           summary: description,

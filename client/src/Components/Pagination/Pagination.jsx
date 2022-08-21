@@ -5,12 +5,16 @@ import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 
 const Pagination = ({ handlePageChange, currentPage, actualRecipes }) => {
   //const recipes = useSelector((state) => state.loadedRecipes);
+  const amountOfPages = 9;
 
   const handlePageAmount = () => {
-    const pagesAmount = Math.ceil(actualRecipes.length / 9);
+    const pagesAmount = Math.ceil(actualRecipes.length / amountOfPages);
     const pagesAmountArr = [];
     for (let i = 0; i < pagesAmount; i++) {
       pagesAmountArr.push(i + 1);
+    }
+    if (currentPage > pagesAmountArr.length) {
+      handlePageChange(1);
     }
     return pagesAmountArr.map((pageNumber) => {
       return (
@@ -32,7 +36,7 @@ const Pagination = ({ handlePageChange, currentPage, actualRecipes }) => {
   };
 
   const goToLastPage = () => {
-    handlePageChange(Math.ceil(actualRecipes.length / 9));
+    handlePageChange(Math.ceil(actualRecipes.length / amountOfPages));
   };
 
   return (

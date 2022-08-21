@@ -15,8 +15,10 @@ const cleanSteps = (recipe) => {
         number: steps[i].number,
         step: steps[i].step,
       });
-      for (var n = 0; n < steps[i].ingredients.length; n++) {
-        ingredients.add(steps[i].ingredients[n].name);
+      if (steps[i].ingredients.length > 0) {
+        steps[i].ingredients.forEach((ingredient) => {
+          ingredients.add(ingredient.name);
+        });
       }
     }
   }
@@ -24,14 +26,14 @@ const cleanSteps = (recipe) => {
     return recipe;
   } else {
     recipe.analyzedInstructions = newSteps;
-    recipe.ingredients = Array.from(ingredients);
+    let test = Array.from(ingredients);
+    recipe.ingredients = test;
     return recipe;
   }
 };
 
 const cleanDescription = (recipe) => {
   let newDescription = [];
-
   for (var i = 0; i < recipe.summary.length; i++) {
     if (recipe.summary[i] === "<") {
       if (recipe.summary[i + 2] === ">") {

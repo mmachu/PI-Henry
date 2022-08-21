@@ -42,7 +42,7 @@ const ConfirmModal = ({ setConfirmIsOpen, newRecipe, handleReset }) => {
 
   const renderDiet = () => {
     return (
-      <div>
+      <div className={styles.over}>
         <h3>Su nueva receta es:</h3>
         <ul className={styles.ul}>
           <h4>Titulo</h4>
@@ -54,14 +54,18 @@ const ConfirmModal = ({ setConfirmIsOpen, newRecipe, handleReset }) => {
           <h4>Pasos:</h4>
           {newRecipe.analyzedInstructions.map((step, index) => {
             return (
-              <li key={index}>
-                {step.number}. {step.step}
+              <li className={styles.li} key={index}>
+                {step.number + 1}. {step.step}
               </li>
             );
           })}
           <h4>Ingredientes:</h4>
           {newRecipe.ingredients.map((ing, index) => {
-            return <li key={index}>{ing}</li>;
+            return (
+              <li className={styles.li} key={index}>
+                {ing}
+              </li>
+            );
           })}
           <h4>Dietas:</h4>
           {newRecipe.diets.length > 0 ? (
@@ -92,9 +96,11 @@ const ConfirmModal = ({ setConfirmIsOpen, newRecipe, handleReset }) => {
     <>
       <div className={styles.darkBG} />
       <div className={styles.centered}>
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            {apiMessage === "" ? renderDiet() : renderMessage()}
+        <div className={styles.over}>
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              {apiMessage === "" ? renderDiet() : renderMessage()}
+            </div>
           </div>
         </div>
       </div>

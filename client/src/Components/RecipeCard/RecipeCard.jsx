@@ -29,6 +29,9 @@ const RecipeCard = ({ recipe }) => {
         />{" "}
       </div>
       <div className={styles.recipeTitle}>{recipe && recipe.title}</div>
+      <div className={styles.recipeHealthScore}>
+        {recipe && <p>Health Score: {recipe.healthScore}</p>}
+      </div>
       <div className={styles.recipeDiets}>{mapDiets()}</div>
       {/* </div> */}
     </NavLink>

@@ -6,7 +6,6 @@ import Navigation from "../Navigation/Navigation.js";
 import styles from "./recipedetail.module.css";
 import loading from "../../assets/loading.gif";
 const RecipeDetail = () => {
-  //Parametro nuevo
   const [recipe, setRecipe] = useState({});
   const { id } = useParams();
   const axios = require("axios").default;
@@ -19,7 +18,6 @@ const RecipeDetail = () => {
       .get(`http://localhost:3001/recipes/${id}`)
       .then((res) => {
         setRecipe(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         setErrorMsj(err.response.data);

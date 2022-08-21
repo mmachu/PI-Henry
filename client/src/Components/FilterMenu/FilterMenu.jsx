@@ -10,7 +10,7 @@ const FilterMenu = ({ handleShowFilters, selectedDiets, setSelectedDiets }) => {
 
   useEffect(() => {
     let updatedIsChecked = [];
-    diets.forEach((diet, index) => {
+    diets.forEach((diet) => {
       if (selectedDiets.includes(diet)) {
         updatedIsChecked.push(true);
       } else {

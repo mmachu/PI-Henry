@@ -27,25 +27,49 @@ const RecipeSearch = () => {
   useEffect(() => {
     if (recipes?.length > 0) {
       setSelectedDiets([...allDiets]);
+    } else {
+      axios
+        .get(`http://localhost:3001/recipes?name=`)
+        .then((res) => {
+          console.log(res.data);
+          let diets = res.data.pop();
+          dispatch(loadDiets(diets));
+          dispatch(loadRecipes(res.data));
+          setSelectedDiets([...diets]);
+        })
+        .catch((err) => {
+          window.alert(
+            `Error al cargar las recetas: ${err.response.data.message}`
+          );
+        });
     }
   }, []);
 
-  async function handleSearch() {
-    await axios
-      .get(`http://localhost:3001/recipes?name=${searchTerm}`)
-      .then((res) => {
-        let diets = res.data.pop();
-        dispatch(loadDiets(diets));
-        dispatch(loadRecipes(res.data));
-        setSelectedDiets([...diets]);
-      })
-      .catch((err) => {
-        window.alert(`Error al cargar las recetas: ${err.message}`);
-      });
-  }
+  const handleSearch = async () => {
+    if (searchTerm === "") {
+      window.alert("Debe ingresar un termino de busqueda");
+    } else {
+      axios
+        .get(`http://localhost:3001/recipes?name=${searchTerm}`)
+        .then((res) => {
+          let diets = res.data.pop();
+          dispatch(loadDiets(diets));
+          dispatch(loadRecipes(res.data));
+          setSelectedDiets([...diets]);
+        })
+        .catch((err) => {
+          window.alert(
+            `Error al cargar las recetas: ${err.response.data.message}`
+          );
+        });
+    }
+  };
 
   const handleSearchTermLoad = (e) => {
-    setSearchTerm(e.target.value);
+    let searchRegex = /[^0-9!@#/\\\?\$%\^\&*\)\(+=\[\]\{\}|.,_-]+$/g;
+    if (e.target.value.match(searchRegex) || e.target.value === "") {
+      setSearchTerm(e.target.value);
+    }
   };
 
   const handleEnter = (e) => {
